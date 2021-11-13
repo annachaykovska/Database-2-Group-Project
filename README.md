@@ -15,5 +15,9 @@
     - ```export FLASK_APP=website_main.py```
     - ```flask run```
     
-### See webpage
+### View webpage
+- Make sure Flask server is running
 - http://127.0.0.1:5000/
+
+### Resources/Borrowed Code
+- https://github.com/CoreyMSchafer/code_snippets/tree/master/Python/Flask_Blog
