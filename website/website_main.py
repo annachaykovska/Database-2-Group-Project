@@ -31,6 +31,18 @@ def home():
 def about():
     return render_template('about.html')
 
+@app.route("/courses")
+def courses():
+    return render_template('courses.html')
+
+@app.route("/students")
+def students():
+    return render_template('students.html')
+
+@app.route("/instructors")
+def instructors():
+    return render_template('instructors.html')
+
 
 if __name__ == '__main__':
     app.run(debug=True)
