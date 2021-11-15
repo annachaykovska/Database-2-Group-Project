@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '5791628bb0b13ce0c676dfde280ba245'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://KAN:KAN@DESKTOP-AUSTIN/SQLEXPRESS'  # Can change this to be another db
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///CourseDB.db'  # Can change this to be another db
 db = SQLAlchemy(app)
 
 # This is the structure of the database table to use
@@ -14,7 +14,7 @@ class Courses(db.Model):
     CourseCode = db.Column(db.String(7), primary_key=True)
     AntireqID = db.Column(db.Integer, nullable=False)
     PreReqID = db.Column(db.Integer, nullable=False)
-    Name = db.Column(db.String(100), nullable=False)
+    Name = db.Column(db.String(150), nullable=False)
 
 class PreReq(db.Model):
     __tablename__ = "CoursePreReq"
@@ -35,10 +35,10 @@ class AntiReq(db.Model):
     AntiReq6 = db.Column(db.String(50), nullable=True)
     AntiReq7 = db.Column(db.String(50), nullable=True)
     AntiReq8 = db.Column(db.String(50), nullable=True)
-    Antireq8 = db.Column(db.String(50), nullable=True)
+    AntiReq8 = db.Column(db.String(50), nullable=True)
 ## TODO: This will just make a new database if there isn't one here already, probably will need
 ##  to remove this
-#db.create_all()
+db.create_all()
 
 
 @app.route("/")
