@@ -2,17 +2,19 @@
 
 ### Python Packages to Install
 - Flask
+- email_validator
+- flask_wtf
 
 ### Run (Windows)
-- Go to repository with the website_main.py
+- Go to repository with the run.py
 - Run:
-    - ```set FLASK_APP=website_main.py```
+    - ```set FLASK_APP=run.py```
     - ```flask run```
     
 ### Run (MAC)
 - Go to repository with the website_main.py
 - Run:
-    - ```export FLASK_APP=website_main.py```
+    - ```export FLASK_APP=run.py```
     - ```flask run```
     
 ### See webpage
