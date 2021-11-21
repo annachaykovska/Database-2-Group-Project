@@ -1,18 +1,20 @@
 # CPSC-571-Group-Project
 
-### Python Packages to Install
+### Python Packages to Install (pip install)
 - Flask
 - email_validator
 - flask_wtf
+- flask_bcrypt
+- flask_login
 
 ### Run (Windows)
-- Go to repository with the run.py
+- Go to repository with the run.py file
 - Run:
     - ```set FLASK_APP=run.py```
     - ```flask run```
     
 ### Run (MAC)
-- Go to repository with the website_main.py
+- Go to repository with the run.py file
 - Run:
     - ```export FLASK_APP=run.py```
     - ```flask run```
