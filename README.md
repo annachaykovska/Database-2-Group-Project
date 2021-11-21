@@ -29,6 +29,34 @@ notes, videos, etc. Students should submit their solutions for the homeworks/exa
 can mark a submission and provide feedback. Students should be able to evaluate instructors for each course separately using a
 questionnaire with scale from 1 to 10 and should be able to add written text. The evaluation by each student should be weighted 
 based on his/her performance in the course. For example, lower weight should be assigned to an poor evaluation by a student whose
-performance is poor in case some poorperforming students have good evaluation. Based on the evaluation, it is important to rank
+performance is poor in case some poor performing students have good evaluation. Based on the evaluation, it is important to rank
 instructors based on course level (year in the program) or based on the specific course if more than one section are offered in 
 one semester.(4 students)
+
+### Assignment Breakdown
+Courses:
+- Offered in specific semesters by specific instructors
+
+Students:
+- Can register in courses given:
+    - Enough correct prereqs
+    - Won't pass the allowed number of courses (5 courses x 2 semesters x 4 years = 40)
+- Submit homework by a deadline
+
+Instructors:
+- Can post (can probably do this as an all encompassing upload/download link for everything but announcements):
+    - Announcements
+    - Homework
+    - Exams
+    - Practice/Lab material
+    - Lecture notes
+    - Videos
+    - Etc
+- Can see and mark students submissions
+    - Also add feedback
+    
+Instructor Evaluation:
+- Students can grade each instructor separately on a scale of 1 to 10
+- Weight reviews based on students course grades for that course
+- Use this evaluation to rank profs
+    - Sort by course levels or by lecture sections
