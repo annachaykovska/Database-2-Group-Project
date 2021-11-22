@@ -67,15 +67,15 @@ def about():
 def courses():
     return render_template('courses.html')
 
-
-@app.route("/students")
-def students():
-    return render_template('students.html')
-
-
-@app.route("/instructors")
-def instructors():
-    return render_template('instructors.html')
+#
+# @app.route("/students")
+# def students():
+#     return render_template('students.html')
+#
+#
+# @app.route("/instructors")
+# def instructors():
+#     return render_template('instructors.html')
 
 
 @app.route("/IO")
@@ -88,7 +88,7 @@ def IO():
 def new_post():
     form = PostForm()
     if form.validate_on_submit():
-        post = Post(title=form.title.data, content=form.content.data, author=current_user)
+        post = Post(title=form.title.data, content=form.content.data, author=current_user, course=form.course.data)
         db.session.add(post)
         db.session.commit()
         flash('Your post has been created!', 'success')
@@ -100,7 +100,7 @@ def new_post():
 @app.route("/post/<int:post_id>")
 def post(post_id):
     post = Post.query.get_or_404(post_id)
-    return render_template('post.html', title=post.title, post=post)
+    return render_template('post.html', title=post.title, course=post.course, post=post)
 
 
 @app.route("/post/<int:post_id>/update", methods=['GET', 'POST'])
@@ -113,12 +113,14 @@ def update_post(post_id):
     if form.validate_on_submit():
         post.title = form.title.data
         post.content = form.content.data
+        post.course = form.course.data
         db.session.commit()
         flash('Your post has been updated!', 'success')
         return redirect(url_for('post', post_id=post.id))
     elif request.method == 'GET':
         form.title.data = post.title
         form.content.data = post.content
+        form.course.data = post.course
     return render_template('create_post.html', title='Update Post',
                            form=form, legend='Update Post')
 

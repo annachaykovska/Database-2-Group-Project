@@ -31,6 +31,9 @@
                     {{ form.content(class="form-control form-control-lg") }}
                 {% endif %}
             </div>
+             <div class="form-group">
+                    {{ form.course.label(class="form-control-label") }} {{form.course}}
+             </div>
         </fieldset>
         <div class="form-group">
             {{ form.submit(class="btn btn-outline-info") }}

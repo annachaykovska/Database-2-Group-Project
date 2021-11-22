@@ -37,5 +37,9 @@ class LoginForm(FlaskForm):
 
 class PostForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
+    course = SelectField('Course', choices=[('CPSC 571', 'CPSC 571'), ('CPSC 313', 'CPSC 313'),
+                                            ('CPSC 441', 'CPSC 441'), ('CPSC 449', 'CPSC 449'),
+                                            ('CPSC 530', 'CPSC 530'), ('CPSC 231', 'CPSC 231')],
+                       validators=[DataRequired()])
     content = TextAreaField('Content', validators=[DataRequired()])
     submit = SubmitField('Post')
