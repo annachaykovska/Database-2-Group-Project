@@ -1,6 +1,8 @@
-from website import db, login_manager
 from flask_login import UserMixin
 from datetime import datetime, timezone
+
+from website import db, login_manager
+from website.defaultDatabaseEntries import courseList, antireqList, prereqList
 
 
 @login_manager.user_loader
@@ -41,7 +43,7 @@ class Courses(db.Model):
     Course = db.Column(db.Integer, nullable=False)
     CourseCode = db.Column(db.String(7), primary_key=True)
     AntireqID = db.Column(db.Integer, nullable=False)
-    PreReqID = db.Column(db.Integer, nullable=False)
+    PrereqID = db.Column(db.Integer, nullable=False)
     Name = db.Column(db.String(150), nullable=False)
 
 
@@ -56,7 +58,7 @@ class PreReq(db.Model):
 
 class AntiReq(db.Model):
     __tablename__ = "CourseAntiReq"
-    PreReqID = db.Column(db.Integer, primary_key=True)
+    AntiReqID = db.Column(db.Integer, primary_key=True)
     AntiReq1 = db.Column(db.String(50), nullable=True)
     AntiReq2 = db.Column(db.String(50), nullable=True)
     AntiReq3 = db.Column(db.String(50), nullable=True)
@@ -67,7 +69,14 @@ class AntiReq(db.Model):
     AntiReq8 = db.Column(db.String(50), nullable=True)
     AntiReq9 = db.Column(db.String(50), nullable=True)
 
-## TODO: This will just make a new database if there isn't one here already, probably will need
-##  to remove this
-db.create_all()
 
+# TODO: Comment this out if you don't need to make a new database
+# TODO: Add the prereq and antireq list too
+db.create_all()
+for c in courseList:
+    db.session.add(Courses(**c))
+for a in antireqList:
+    db.session.add(AntiReq(**a))
+for p in prereqList:
+    db.session.add(PreReq(**p))
+db.session.commit()
