@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, BooleanField, SelectField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, SelectField, TextAreaField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 from website.models import User
 
@@ -33,3 +33,13 @@ class LoginForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired()])
     remember = BooleanField('Remember Me')
     submit = SubmitField('Login')
+
+
+class PostForm(FlaskForm):
+    title = StringField('Title', validators=[DataRequired()])
+    course = SelectField('Course', choices=[('CPSC 571', 'CPSC 571'), ('CPSC 313', 'CPSC 313'),
+                                            ('CPSC 441', 'CPSC 441'), ('CPSC 449', 'CPSC 449'),
+                                            ('CPSC 530', 'CPSC 530'), ('CPSC 231', 'CPSC 231')],
+                       validators=[DataRequired()])
+    content = TextAreaField('Content', validators=[DataRequired()])
+    submit = SubmitField('Post')
