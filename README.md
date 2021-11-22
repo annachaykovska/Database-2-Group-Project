@@ -62,3 +62,8 @@ Instructor Evaluation:
 - Weight reviews based on students course grades for that course
 - Use this evaluation to rank profs
     - Sort by course levels or by lecture sections
+
+
+### Code Resources:
+- https://github.com/CoreyMSchafer/code_snippets/tree/master/Python/Flask_Blog
+- https://www.youtube.com/watch?v=MwZwr5Tvyxo&list=PL-osiE80TeTs4UjLw5MM6OjgkjFeUxCYH&ab_channel=CoreySchafer
