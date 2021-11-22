@@ -75,3 +75,7 @@ def students():
 @app.route("/instructors")
 def instructors():
     return render_template('instructors.html')
+
+@app.route("/IO")
+def IO():
+    return render_template('IO.html')
