@@ -55,6 +55,7 @@ def logout():
 @app.route("/account")
 @login_required
 def account():
+    # https://github.com/PrettyPrinted/youtube_video_code/blob/master/2019/06/21/Get%20Form%20Checkbox%20Data%20in%20Flask%20With%20.getlist/checkbox_data/templates/index.html
     return render_template('account.html', title='Account')
 
 

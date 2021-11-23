@@ -2,7 +2,7 @@ from flask_login import UserMixin
 from datetime import datetime, timezone
 
 from website import db, login_manager
-from website.defaultDatabaseEntries import courseList, antireqList, prereqList
+from website.defaultDatabaseEntries import courseList, antireqList, prereqList, otherCoursesList
 
 
 @login_manager.user_loader
@@ -70,13 +70,22 @@ class AntiReq(db.Model):
     AntiReq9 = db.Column(db.String(50), nullable=True)
 
 
+class OtherCourses(db.Model):
+    __tablename__ = "OtherCourses"
+    Department = db.Column(db.String(4), nullable=False)
+    Course = db.Column(db.Integer, nullable=False)
+    CourseCode = db.Column(db.String(7), primary_key=True)
+    Name = db.Column(db.String(150), nullable=False)
+
+
 # TODO: Comment this out if you don't need to make a new database
-# TODO: Add the prereq and antireq list too
-db.create_all()
-for c in courseList:
-    db.session.add(Courses(**c))
-for a in antireqList:
-    db.session.add(AntiReq(**a))
-for p in prereqList:
-    db.session.add(PreReq(**p))
-db.session.commit()
+# db.create_all()
+# for c in courseList:
+#     db.session.add(Courses(**c))
+# for a in antireqList:
+#     db.session.add(AntiReq(**a))
+# for p in prereqList:
+#     db.session.add(PreReq(**p))
+# for o in otherCoursesList:
+#     db.session.add(OtherCourses(**o))
+# db.session.commit()
