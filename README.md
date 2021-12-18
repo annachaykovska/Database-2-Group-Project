@@ -54,6 +54,7 @@ Instructors:
     - Lecture notes
     - Videos
     - Etc
+    - https://www.youtube.com/watch?v=803Ei2Sq-Zs&list=PL-osiE80TeTs4UjLw5MM6OjgkjFeUxCYH&index=7&ab_channel=CoreySchafer
 - Can see and mark students submissions
     - Also add feedback
     

@@ -1,6 +1,8 @@
-from website import db, login_manager
 from flask_login import UserMixin
 from datetime import datetime, timezone
+
+from website import db, login_manager
+from website.defaultDatabaseEntries import courseList, antireqList, prereqList, otherCoursesList
 
 
 @login_manager.user_loader
@@ -17,6 +19,8 @@ class User(db.Model, UserMixin):
     posts = db.relationship('Post', backref='author', lazy=True)
     # 0 = Student, 1 = Teacher, 2 = Admin
     role = db.Column(db.Integer, nullable=False)
+    pastCpscCourses = db.Column(db.String(1000), nullable=True)
+    pastOtherCourses = db.Column(db.String(1000), nullable=True)
 
     def __repr__(self):
         return f"User('{self.username}', '{self.email}', '{self.image_file}')"
@@ -41,7 +45,7 @@ class Courses(db.Model):
     Course = db.Column(db.Integer, nullable=False)
     CourseCode = db.Column(db.String(7), primary_key=True)
     AntireqID = db.Column(db.Integer, nullable=False)
-    PreReqID = db.Column(db.Integer, nullable=False)
+    PrereqID = db.Column(db.Integer, nullable=False)
     Name = db.Column(db.String(150), nullable=False)
 
 
@@ -56,7 +60,7 @@ class PreReq(db.Model):
 
 class AntiReq(db.Model):
     __tablename__ = "CourseAntiReq"
-    PreReqID = db.Column(db.Integer, primary_key=True)
+    AntiReqID = db.Column(db.Integer, primary_key=True)
     AntiReq1 = db.Column(db.String(50), nullable=True)
     AntiReq2 = db.Column(db.String(50), nullable=True)
     AntiReq3 = db.Column(db.String(50), nullable=True)
@@ -67,24 +71,42 @@ class AntiReq(db.Model):
     AntiReq8 = db.Column(db.String(50), nullable=True)
     AntiReq9 = db.Column(db.String(50), nullable=True)
 
+
 class courses_taken(db.Model):
     __tablename__ = "courses_taken"
     #__table_args__ = (
     #    PrimaryKeyConstraint('CompoundPrimaryKey', 'identifier,Term,Course'),
     #)
-    identifier  = db.Column(db.Integer      , primary_key=True)
-    Term        = db.Column(db.Integer      , primary_key=True)
-    Course      = db.Column(db.String(15)   , primary_key=True)
+    identifier = db.Column(db.Integer, primary_key=True)
+    Term = db.Column(db.Integer, primary_key=True)
+    Course = db.Column(db.String(15), primary_key=True)
+
 
 class cpsc_random_sample(db.Model):
     __tablename__ = "cpsc_random_sample"
-    Admit_Term              = db.Column(db.Integer      , nullable=False)
-    Degree                  = db.Column(db.String(10)   , nullable=True)
-    Primary_Plan_Description= db.Column(db.String(30)   , nullable=True)
-    Concentration_Desc      = db.Column(db.String(40)   , nullable=True)
-    Identifier              = db.Column(db.Integer      , primary_key=True)
+    Admit_Term = db.Column(db.Integer, nullable=False)
+    Degree = db.Column(db.String(10), nullable=True)
+    Primary_Plan_Description = db.Column(db.String(30), nullable=True)
+    Concentration_Desc = db.Column(db.String(40), nullable=True)
+    Identifier = db.Column(db.Integer, primary_key=True)
 
-## TODO: This will just make a new database if there isn't one here already, probably will need
-##  to remove this
-db.create_all()
 
+class OtherCourses(db.Model):
+    __tablename__ = "OtherCourses"
+    Department = db.Column(db.String(4), nullable=False)
+    Course = db.Column(db.Integer, nullable=False)
+    CourseCode = db.Column(db.String(7), primary_key=True)
+    Name = db.Column(db.String(150), nullable=False)
+
+
+# TODO: Comment this out if you don't need to make a new database
+# db.create_all()
+# for c in courseList:
+#     db.session.add(Courses(**c))
+# for a in antireqList:
+#     db.session.add(AntiReq(**a))
+# for p in prereqList:
+#     db.session.add(PreReq(**p))
+# for o in otherCoursesList:
+#     db.session.add(OtherCourses(**o))
+# db.session.commit()
