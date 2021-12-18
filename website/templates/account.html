@@ -39,14 +39,26 @@
                         {{ form.email(class="form-control form-control-lg") }}
                     {% endif %}
                 </div>
-                <h6>Choose CPSC Courses</h6>
+                <h6> Your Current Saved CPSC Courses</h6>
+                {% for p in pastCpscCourses %}
+                    <div class="form-check">
+                        {{p}}
+                    </div>
+                {% endfor %}
+                <h6> Your Current Saved Other Courses</h6>
+                {% for p in pastOtherCourses %}
+                    <div class="form-check">
+                        {{p}}
+                    </div>
+                {% endfor %}
+                <h6>Choose Past CPSC Courses</h6>
                 {% for choice in form.courseChoices %}
                     <div class="form-check">
                         {{ choice(class="form-check-input") }}
                         {{ choice.label(class="form-check-label") }}
                     </div>
                 {% endfor %}
-                <h6>Choose Other Courses</h6>
+                <h6>Choose Other Past Courses</h6>
                 {% for choice in form.otherCourseChoices %}
                     <div class="form-check">
                         {{ choice(class="form-check-input") }}

@@ -57,28 +57,54 @@ def logout():
 def account():
     # https://github.com/PrettyPrinted/youtube_video_code/blob/master/2019/06/21/Get%20Form%20Checkbox%20Data%20in%20Flask%20With%20.getlist/checkbox_data/templates/index.html
     form = UpdateAccountForm()
+    choices = []
+    otherChoices = []
+    allCpscCourses = db.session.query(Courses).all()
+    for c in allCpscCourses:
+        choices.append((c.CourseCode, c.CourseCode))
+    allOtherCourses = db.session.query(OtherCourses).all()
+    for c in allOtherCourses:
+        otherChoices.append((c.CourseCode, c.CourseCode))
+
+    form.courseChoices.choices = choices
+    form.otherCourseChoices.choices = otherChoices
+    pastCpscCourses = "No Saved Courses"
+    pastOtherCourses = "No Saved Courses"
+    if current_user.pastCpscCourses:
+        pastCpscCourses = current_user.pastCpscCourses.split(", ")
+    if current_user.pastOtherCourses:
+        pastOtherCourses = current_user.pastOtherCourses.split(", ")
+
     if form.validate_on_submit():
         current_user.username = form.username.data
         current_user.email = form.email.data
+        pastCpscCourses = ""
+        for c in form.courseChoices.data:
+            if not pastCpscCourses:
+                pastCpscCourses = c
+            else:
+                pastCpscCourses += f", {c}"
+        current_user.pastCpscCourses = pastCpscCourses
+
+        pastOtherCourses = ""
+        for c in form.otherCourseChoices.data:
+            if not pastOtherCourses:
+                pastOtherCourses = c
+            else:
+                pastOtherCourses += f", {c}"
+        current_user.pastOtherCourses = pastOtherCourses
+
         db.session.commit()
         flash('Your account has been updated!', 'success')
         return redirect(url_for('account'))
     elif request.method == 'GET':
         form.username.data = current_user.username
         form.email.data = current_user.email
-
-        allCpscCourses = db.session.query(Courses).all()
-        choices = []
-        for c in allCpscCourses:
-            choices.append((c.CourseCode, c.CourseCode))
-
-        allOtherCourses = db.session.query(OtherCourses).all()
-        otherChoices = []
-        for c in allOtherCourses:
-            otherChoices.append((c.CourseCode, c.CourseCode))
-        form.courseChoices.choices = choices
-        form.otherCourseChoices.choices = otherChoices
-    return render_template('account.html', title='Account', form=form)
+    return render_template('account.html',
+                           title='Account',
+                           form=form,
+                           pastCpscCourses=pastCpscCourses,
+                           pastOtherCourses=pastOtherCourses)
 
 
 @app.route("/about")

@@ -19,6 +19,8 @@ class User(db.Model, UserMixin):
     posts = db.relationship('Post', backref='author', lazy=True)
     # 0 = Student, 1 = Teacher, 2 = Admin
     role = db.Column(db.Integer, nullable=False)
+    pastCpscCourses = db.Column(db.String(1000), nullable=True)
+    pastOtherCourses = db.Column(db.String(1000), nullable=True)
 
     def __repr__(self):
         return f"User('{self.username}', '{self.email}', '{self.image_file}')"
