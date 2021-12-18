@@ -75,22 +75,19 @@ class courses_taken(db.Model):
     #__table_args__ = (
     #    PrimaryKeyConstraint('CompoundPrimaryKey', 'identifier,Term,Course'),
     #)
-    identifier  = db.Column(db.Integer      , primary_key=True)
-    Term        = db.Column(db.Integer      , primary_key=True)
-    Course      = db.Column(db.String(15)   , primary_key=True)
+    identifier = db.Column(db.Integer, primary_key=True)
+    Term = db.Column(db.Integer, primary_key=True)
+    Course = db.Column(db.String(15), primary_key=True)
 
 
 class cpsc_random_sample(db.Model):
     __tablename__ = "cpsc_random_sample"
-    Admit_Term              = db.Column(db.Integer      , nullable=False)
-    Degree                  = db.Column(db.String(10)   , nullable=True)
-    Primary_Plan_Description= db.Column(db.String(30)   , nullable=True)
-    Concentration_Desc      = db.Column(db.String(40)   , nullable=True)
-    Identifier              = db.Column(db.Integer      , primary_key=True)
+    Admit_Term = db.Column(db.Integer, nullable=False)
+    Degree = db.Column(db.String(10), nullable=True)
+    Primary_Plan_Description = db.Column(db.String(30), nullable=True)
+    Concentration_Desc = db.Column(db.String(40), nullable=True)
+    Identifier = db.Column(db.Integer, primary_key=True)
 
-## TODO: This will just make a new database if there isn't one here already, probably will need
-##  to remove this
-db.create_all()
 
 class OtherCourses(db.Model):
     __tablename__ = "OtherCourses"

@@ -61,6 +61,7 @@ class UpdateAccountForm(FlaskForm):
                         validators=[DataRequired(), Email()])
     # picture = FileField('Update Profile Picture', validators=[FileAllowed(['jpg', 'png'])])
     courseChoices = MultiCheckboxField('Courses', coerce=str)
+    otherCourseChoices = MultiCheckboxField('OtherCourses', coerce=str)
     submit = SubmitField('Update')
 
     def validate_username(self, username):

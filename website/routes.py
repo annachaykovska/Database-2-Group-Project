@@ -1,6 +1,6 @@
 from flask import render_template, flash, redirect, url_for, request, abort
 from website import app, db, bcrypt
-from website.models import Courses, PreReq, AntiReq, User, Post
+from website.models import Courses, PreReq, AntiReq, User, Post, OtherCourses
 from website.forms import RegistrationForm, LoginForm, PostForm, UpdateAccountForm
 from flask_login import login_user, current_user, logout_user, login_required
 
@@ -66,7 +66,18 @@ def account():
     elif request.method == 'GET':
         form.username.data = current_user.username
         form.email.data = current_user.email
-        form.courseChoices.choices = [("a", "A"), ("b", "B"), ("c", "C")]
+
+        allCpscCourses = db.session.query(Courses).all()
+        choices = []
+        for c in allCpscCourses:
+            choices.append((c.CourseCode, c.CourseCode))
+
+        allOtherCourses = db.session.query(OtherCourses).all()
+        otherChoices = []
+        for c in allOtherCourses:
+            otherChoices.append((c.CourseCode, c.CourseCode))
+        form.courseChoices.choices = choices
+        form.otherCourseChoices.choices = otherChoices
     return render_template('account.html', title='Account', form=form)
 
 
