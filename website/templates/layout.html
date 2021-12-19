@@ -33,9 +33,6 @@
             <!-- Navbar Right Side -->
             <div class="navbar-nav">
               {% if current_user.is_authenticated %}
-                {% if current_user.role != 0 %}
-                    <a class="nav-item nav-link" href="{{ url_for('new_post') }}">New Post</a>
-                {% endif %}
                 <a class="nav-item nav-link" href="{{ url_for('account') }}">Account</a>
                 <a class="nav-item nav-link" href="{{ url_for('logout') }}">Logout</a>
               {% else %}
@@ -65,10 +62,19 @@
           <div class="content-section">
             <h3>Navigation</h3>
               <ul class="list-group">
-                {% if current_user.role != 0 %}
-                    <li class="list-group-item list-group-item-light">
-                        <a class="nav-item nav-link" href="{{ url_for('view_assignments') }}">Assignments</a>
-                    </li>
+                {% if current_user.is_authenticated %}
+                    {% if current_user.role != 0 %}
+                        <li class="list-group-item list-group-item-light">
+                            <a class="nav-item nav-link" href="{{ url_for('new_post') }}">New Post</a>
+                        </li>
+                      <li class="list-group-item list-group-item-light">
+                            <a class="nav-item nav-link" href="{{ url_for('new_assignment') }}">New Assignment</a>
+                        </li>
+                    {% else %}
+                        <li class="list-group-item list-group-item-light">Submit Assignments</li>
+                    {% endif %}
+                {% else %}
+                  <p>Add navigation for not logged in</p>
                 {% endif %}
 <!--                <li class="list-group-item list-group-item-light">Announcements</li>-->
 <!--                <li class="list-group-item list-group-item-light">Calendars</li>-->

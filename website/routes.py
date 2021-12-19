@@ -127,13 +127,35 @@ def IO():
 def new_post():
     form = PostForm()
     if form.validate_on_submit():
-        post = Post(title=form.title.data, content=form.content.data, author=current_user, course=form.course.data)
+        post = Post(title=form.title.data,
+                    content=form.content.data,
+                    author=current_user,
+                    course=form.course.data,
+                    assignment_flag=False)
         db.session.add(post)
         db.session.commit()
         flash('Your post has been created!', 'success')
         return redirect(url_for('home'))
     return render_template('create_post.html', title='New Post',
-                           form=form, legend='New Post')
+                           form=form, legend='New Post', assignment=False)
+
+
+@app.route("/assignment/new", methods=['GET', 'POST'])
+@login_required
+def new_assignment():
+    form = PostForm()
+    if form.validate_on_submit():
+        post = Post(title=form.title.data,
+                    content=form.content.data,
+                    author=current_user,
+                    course=form.course.data,
+                    assignment_flag=True)
+        db.session.add(post)
+        db.session.commit()
+        flash('Your post has been created!', 'success')
+        return redirect(url_for('home'))
+    return render_template('create_post.html', title='New Assignment',
+                           form=form, legend='New Assignment', assignment=True)
 
 
 @app.route("/post/<int:post_id>")
@@ -176,7 +198,7 @@ def delete_post(post_id):
     return redirect(url_for('home'))
 
 
-@app.route("/teacher-assignments")
-@login_required
-def view_assignments():
-    return render_template('assignments.html', title='Assignments')
+# @app.route("/teacher-assignments")
+# @login_required
+# def view_assignments():
+#     return render_template('assignments.html', title='Assignments')
