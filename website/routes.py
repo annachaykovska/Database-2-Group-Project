@@ -116,16 +116,6 @@ def about():
 def courses():
     return render_template('courses.html')
 
-#
-# @app.route("/students")
-# def students():
-#     return render_template('students.html')
-#
-#
-# @app.route("/instructors")
-# def instructors():
-#     return render_template('instructors.html')
-
 
 @app.route("/IO")
 def IO():
@@ -185,3 +175,8 @@ def delete_post(post_id):
     flash('Your post has been deleted!', 'success')
     return redirect(url_for('home'))
 
+
+@app.route("/teacher-assignments")
+@login_required
+def view_assignments():
+    return render_template('assignments.html', title='Assignments')
