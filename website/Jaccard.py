@@ -53,28 +53,28 @@ class Jaccard:
         seed5= (int)(random.random() * numStudents)
         k1 = arrayList[seed]
         print(seed)
-        if seed2 == seed:
-            while seed2 == seed:
+        if seed2 == seed or arrayList[seed2] == k1:
+            while seed2 == seed or arrayList[seed2] == k1:
                 seed2 = (int)(random.random() * numStudents)
         k2 = arrayList[seed2]
         print(seed2)
-        if seed3 == seed or seed3 == seed2:
-                while seed3 == seed or seed3 == seed2:
+        if seed3 == seed or seed3 == seed2 or arrayList[seed3] == k2 or arrayList[seed3] == k1:
+                while seed3 == seed or seed3 == seed2 or arrayList[seed3] == k2 or arrayList[seed3] == k1:
                     seed3 = (int)(random.random() * numStudents)
         k3 = arrayList[seed3]
         print(seed3)
-        if seed4 == seed3 or seed4 == seed2 or seed4 == seed:
-                while seed4 == seed3 or seed4 == seed2 or seed4 == seed:
+        if seed4 == seed3 or seed4 == seed2 or seed4 == seed or arrayList[seed4] == k3 or arrayList[seed4] == k2 or arrayList[seed4] == k1:
+                while seed4 == seed3 or seed4 == seed2 or seed4 == seed or arrayList[seed4] == k3 or arrayList[seed4] == k2 or arrayList[seed4] == k1:
                     seed4 = (int)(random.random() * numStudents)
         k4 = arrayList[seed4]
         print(seed4)
-        if seed5 == seed3 or seed5 == seed4 or seed5 == seed2 or seed5 == seed:
-                while seed5 == seed3 or seed5 == seed4 or seed5 == seed2 or seed5 == seed:
+        if seed5 == seed3 or seed5 == seed4 or seed5 == seed2 or seed5 == seed or arrayList[seed5] == k3 or arrayList[seed5] == k4 or arrayList[seed5] == k2 or arrayList[seed5] == k1:
+                while seed5 == seed3 or seed5 == seed4 or seed5 == seed2 or seed5 == seed or arrayList[seed5] == k3 or arrayList[seed5] == k4 or arrayList[seed5] == k2 or arrayList[seed5] == k1:
                     seed5 = (int)(random.random() * numStudents)
         k5 = arrayList[seed5]
         print(seed5)
         #for a in k1:
-            #print(a)
+        #    print(a)
         #for a in k2:
         #    print(a)
         #for a in k3:
@@ -107,7 +107,8 @@ class Jaccard:
                 c3 = self.similarity(k3,student)
                 c4 = self.similarity(k4,student)
                 c5 = self.similarity(k5,student)
-                if c1 is None or c2 is None or c3 is None or c4 is None or c5:
+
+                if c1 is None or c2 is None or c3 is None or c4 is None or c5 is None:
                     print("one or more students has not taken any classes. Cannot make comparison")
                     return
                 # group Arrays in Array into their nearest cluster
@@ -179,7 +180,7 @@ class Jaccard:
             
         return k1, k2, k3, k4, k5    
 
-testArr3 = [[1,0,0,0],[1,1,1,0],[1,0,1,0],[1,1,0,0],[0,1,1,0],[1,1,1,0],[0,0,0,0]]
+testArr3 = [[1,0,0],[1,1,0],[1,0,1],[1,1,1],[0,1,1],[0,1,0],[0,0,1]]
 jc = Jaccard()
 print(jc.k_means(testArr3))
     #print(similarity(testArr,testArr2))
