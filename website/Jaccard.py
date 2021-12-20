@@ -26,7 +26,12 @@ class Jaccard:
             elif (arr1[i] == 1 and arr2[i] == 0):
                 oneZeroCount = oneZeroCount +1
             i = i+1
-        return oneOneCount/(zeroOneCount + oneZeroCount + oneOneCount)
+        try:
+             return oneOneCount/(zeroOneCount + oneZeroCount + oneOneCount)
+        except ZeroDivisionError:
+            print("One or more lists has no values to compare to")
+
+        
     # where arraylist is an n-dimensional list on the number of students data we are using.
     # each list is a binary list as to whether or not the student has taken a course or not
     # clusters = k for k means (# of clusters to divide into)  
@@ -93,7 +98,6 @@ class Jaccard:
        
         #round start
         while currentcluster != lastcluster:
-            print("HEY")
             lastcluster = currentcluster.copy()
             for student in arrayList:
                 position = arrayList.index(student)
@@ -103,6 +107,9 @@ class Jaccard:
                 c3 = self.similarity(k3,student)
                 c4 = self.similarity(k4,student)
                 c5 = self.similarity(k5,student)
+                if c1 is None or c2 is None or c3 is None or c4 is None or c5:
+                    print("one or more students has not taken any classes. Cannot make comparison")
+                    return
                 # group Arrays in Array into their nearest cluster
                 closeMatch = max(c1,c2,c3,c4,c5)
 
@@ -172,7 +179,7 @@ class Jaccard:
             
         return k1, k2, k3, k4, k5    
 
-testArr3 = [[1,0,0],[1,1,1],[1,0,1],[1,1,0],[0,1,1],[0,1,0]]
+testArr3 = [[1,0,0,0],[1,1,1,0],[1,0,1,0],[1,1,0,0],[0,1,1,0],[1,1,1,0],[0,0,0,0]]
 jc = Jaccard()
 print(jc.k_means(testArr3))
     #print(similarity(testArr,testArr2))
