@@ -1,5 +1,7 @@
 # Personal additions
 *.db
+uploads/*
+!uploads/.gitkeep
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

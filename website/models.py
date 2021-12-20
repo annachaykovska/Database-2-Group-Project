@@ -34,6 +34,8 @@ class Post(db.Model):
     course = db.Column(db.String(100), nullable=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     assignment_flag = db.Column(db.Boolean, default=False)
+    file_name = db.Column(db.String(100), nullable=True)
+    file_data = db.Column(db.LargeBinary)
 
     def __repr__(self):
         return f"Post('{self.title}', '{self.date_posted}')"

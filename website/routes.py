@@ -145,14 +145,22 @@ def new_post():
 def new_assignment():
     form = PostForm()
     if form.validate_on_submit():
+        file_data = request.files.get(form.assignmentFile.name)
+        if file_data:
+            file_name = form.assignmentFile.name
+            file_data = file_data.read()
+        else:
+            file_name = None
         post = Post(title=form.title.data,
                     content=form.content.data,
                     author=current_user,
                     course=form.course.data,
-                    assignment_flag=True)
+                    assignment_flag=True,
+                    file_name=file_name,
+                    file_data=file_data)
         db.session.add(post)
         db.session.commit()
-        flash('Your post has been created!', 'success')
+        flash('Your new assignment has been created!', 'success')
         return redirect(url_for('home'))
     return render_template('create_post.html', title='New Assignment',
                            form=form, legend='New Assignment', assignment=True)
