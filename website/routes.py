@@ -153,7 +153,12 @@ def new_assignment():
     form = PostForm()
     if form.validate_on_submit():
         file_data = request.files.get(form.assignmentFile.name)
-        due_date = datetime.strptime(request.form.get('duetime'), '%Y-%m-%dT%H:%M')
+        dueString = request.form.get('duetime')
+        if dueString:
+            # Todo: Validate that the input is later than right now if you feel like it
+            due_date = datetime.strptime(dueString, '%Y-%m-%dT%H:%M')
+        else:
+            due_date = None
         post = Post(title=form.title.data,
                     content=form.content.data,
                     author=current_user,

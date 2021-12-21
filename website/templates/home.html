@@ -11,7 +11,9 @@
             </div>
             <h2><a class="article-title" href="{{ url_for('post', post_id=post.id) }}">{{ post.title }}</a></h2>
             {% if post.assignment_flag %}
-                <p class="mr-2">Due: {{ post.date_posted.strftime('%Y-%m-%d %H:%M') }}</p>
+                {% if post.due_date %}
+                    <p class="mr-2">Due: {{ post.due_date.strftime('%Y-%m-%d %H:%M') }}</p>
+                {% endif %}
             {% endif %}
             <h6>Content</h6>
             <p class="article-content">{{ post.content }}</p>

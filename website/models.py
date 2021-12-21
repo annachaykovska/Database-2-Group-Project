@@ -29,7 +29,7 @@ class User(db.Model, UserMixin):
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
-    date_posted = db.Column(db.DateTime, nullable=False, default=datetime.now(timezone.utc))
+    date_posted = db.Column(db.DateTime, nullable=False, default=datetime.now(timezone.utc).astimezone())
     content = db.Column(db.Text, nullable=False)
     course = db.Column(db.String(100), nullable=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
