@@ -131,6 +131,9 @@ def courses():
 def IO():
     return render_template('IO.html')
 
+@app.route("/AssignProf")
+def AssignProf():
+    return render_template('AssignProf.html')
 
 @app.route("/post/new", methods=['GET', 'POST'])
 @login_required
