@@ -194,6 +194,7 @@ def post_file(post_id):
 @login_required
 def update_post(post_id):
     post = Post.query.get_or_404(post_id)
+    assignmentFlag = post.assignment_flag
     if post.author != current_user:
         abort(403)
     form = PostForm()
@@ -201,6 +202,16 @@ def update_post(post_id):
         post.title = form.title.data
         post.content = form.content.data
         post.course = form.course.data
+        file_data = request.files.get(form.assignmentFile.name)
+        dueString = request.form.get('duetime')
+        if dueString:
+            # Todo: Validate that the input is later than right now if you feel like it
+            post.due_date = datetime.strptime(dueString, '%Y-%m-%dT%H:%M')
+        else:
+            post.due_date = None
+        if file_data:
+            post.file_name = form.assignmentFile.name
+            post.file_data = file_data.read()
         db.session.commit()
         flash('Your post has been updated!', 'success')
         return redirect(url_for('post', post_id=post.id))
@@ -208,8 +219,11 @@ def update_post(post_id):
         form.title.data = post.title
         form.content.data = post.content
         form.course.data = post.course
+        if assignmentFlag:
+            form.gradingScale.data = post.grading_scale
+
     return render_template('create_post.html', title='Update Post',
-                           form=form, legend='Update Post')
+                           form=form, legend='Update Post', assignment=assignmentFlag)
 
 
 @app.route("/post/<int:post_id>/delete", methods=['POST'])

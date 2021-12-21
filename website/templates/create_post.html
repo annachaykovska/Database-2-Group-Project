@@ -57,6 +57,9 @@
              </div>
             <div class="form-group">
                 {{ form.csrf_token }}
+                {% if title == "Update Post" %}
+                    <p>Choosing a new file here will overwrite the original</p>
+                {% endif %}
                 {{form.assignmentFile}}
             </div>
 
