@@ -135,6 +135,10 @@ def IO():
 def AssignProf():
     return render_template('AssignProf.html')
 
+@app.route("/CourseEnrollment")
+def CourseEnrollment():
+    return render_template('CourseEnrollment.html')
+
 @app.route("/post/new", methods=['GET', 'POST'])
 @login_required
 def new_post():
