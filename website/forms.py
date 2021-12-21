@@ -46,6 +46,7 @@ class PostForm(FlaskForm):
                                   ('CPSC 530', 'CPSC 530'), ('CPSC 231', 'CPSC 231')],
                          validators=[DataRequired()])
     content = TextAreaField('Content', validators=[DataRequired()])
+    gradingScale = TextAreaField('Grading Scale')
     assignmentFile = FileField('assignmentFile')
     submit = SubmitField('Post')
 

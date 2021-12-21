@@ -34,6 +34,8 @@ class Post(db.Model):
     course = db.Column(db.String(100), nullable=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     assignment_flag = db.Column(db.Boolean, default=False)
+    grading_scale = db.Column(db.Text, nullable=True)
+    due_date = db.Column(db.DateTime, nullable=True)
     file_name = db.Column(db.String(100), nullable=True)
     file_data = db.Column(db.LargeBinary, nullable=True)
 

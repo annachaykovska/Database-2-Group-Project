@@ -1,3 +1,4 @@
+from datetime import datetime
 from io import BytesIO
 
 from flask import render_template, flash, redirect, url_for, request, abort, send_file
@@ -152,10 +153,13 @@ def new_assignment():
     form = PostForm()
     if form.validate_on_submit():
         file_data = request.files.get(form.assignmentFile.name)
+        due_date = datetime.strptime(request.form.get('duetime'), '%Y-%m-%dT%H:%M')
         post = Post(title=form.title.data,
                     content=form.content.data,
                     author=current_user,
                     course=form.course.data,
+                    grading_scale=form.gradingScale.data,
+                    due_date=due_date,
                     assignment_flag=True)
         if file_data:
             post.file_name = file_data.filename

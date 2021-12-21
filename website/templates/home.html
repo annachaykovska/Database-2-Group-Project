@@ -10,10 +10,18 @@
                 <h6>{{post.course}}</h6>
             </div>
             <h2><a class="article-title" href="{{ url_for('post', post_id=post.id) }}">{{ post.title }}</a></h2>
+            {% if post.assignment_flag %}
+                <p class="mr-2">Due: {{ post.date_posted.strftime('%Y-%m-%d %H:%M') }}</p>
+            {% endif %}
+            <h6>Content</h6>
             <p class="article-content">{{ post.content }}</p>
+            {% if post.assignment_flag %}
+                <h6>Grading Scale</h6>
+                <p class="article-content">{{ post.grading_scale }}</p>
+            {% endif %}
             {% if post.file_name %}
                 <form action="{{ url_for('post_file', post_id=post.id) }}" method="POST">
-                    <input class="btn btn-info" type="submit" value="Download Files">
+                    <input class="btn btn-info" type="submit" value="Download File">
                 </form>
                 <p>File Name: {{post.file_name}}</p>
             {% endif %}
