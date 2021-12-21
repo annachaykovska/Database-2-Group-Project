@@ -34,10 +34,10 @@
              <div class="form-group">
                     {{ form.course.label(class="form-control-label") }} {{form.course}}
              </div>
-            {% if assignment == True %}
+            <div class="form-group">
                 {{ form.csrf_token }}
                 {{form.assignmentFile}}
-            {% endif %}
+            </div>
         </fieldset>
         <div class="form-group">
             {{ form.submit(class="btn btn-outline-info") }}

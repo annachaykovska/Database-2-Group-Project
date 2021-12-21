@@ -1,4 +1,6 @@
-from flask import render_template, flash, redirect, url_for, request, abort
+from io import BytesIO
+
+from flask import render_template, flash, redirect, url_for, request, abort, send_file
 from website import app, db, bcrypt
 from website.models import Courses, PreReq, AntiReq, User, Post, OtherCourses
 from website.forms import RegistrationForm, LoginForm, PostForm, UpdateAccountForm
@@ -127,11 +129,15 @@ def IO():
 def new_post():
     form = PostForm()
     if form.validate_on_submit():
+        file_data = request.files.get(form.assignmentFile.name)
         post = Post(title=form.title.data,
                     content=form.content.data,
                     author=current_user,
                     course=form.course.data,
                     assignment_flag=False)
+        if file_data:
+            post.file_name = form.assignmentFile.name
+            post.file_data = file_data.read()
         db.session.add(post)
         db.session.commit()
         flash('Your post has been created!', 'success')
@@ -146,18 +152,15 @@ def new_assignment():
     form = PostForm()
     if form.validate_on_submit():
         file_data = request.files.get(form.assignmentFile.name)
-        if file_data:
-            file_name = form.assignmentFile.name
-            file_data = file_data.read()
-        else:
-            file_name = None
         post = Post(title=form.title.data,
                     content=form.content.data,
                     author=current_user,
                     course=form.course.data,
-                    assignment_flag=True,
-                    file_name=file_name,
-                    file_data=file_data)
+                    assignment_flag=True)
+        if file_data:
+            post.file_name = file_data.filename
+            post.file_data = file_data.read()
+
         db.session.add(post)
         db.session.commit()
         flash('Your new assignment has been created!', 'success')
@@ -170,6 +173,12 @@ def new_assignment():
 def post(post_id):
     post = Post.query.get_or_404(post_id)
     return render_template('post.html', title=post.title, course=post.course, post=post)
+
+
+@app.route("/post/<int:post_id>/view", methods=['GET', 'POST'])
+def post_file(post_id):
+    post = Post.query.get_or_404(post_id)
+    return send_file(BytesIO(post.file_data), attachment_filename=post.file_name, as_attachment=True)
 
 
 @app.route("/post/<int:post_id>/update", methods=['GET', 'POST'])
