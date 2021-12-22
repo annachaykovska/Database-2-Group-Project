@@ -11,7 +11,13 @@ from flask_login import login_user, current_user, logout_user, login_required
 @app.route("/")
 @app.route("/home")
 def home():
-    posts = Post.query.all()
+    posts = Post.query.filter(((Post.course == current_user.current_course_1) |
+                               (Post.course == current_user.current_course_2) |
+                               (Post.course == current_user.current_course_3) |
+                               (Post.course == current_user.current_course_4) |
+                               (Post.course == current_user.current_course_5) |
+                               (Post.course == current_user.current_course_6))
+                              & Post.assignment_flag == 0).all()
     return render_template('home.html', posts=posts)
 
 
@@ -22,9 +28,16 @@ def register():
     form = RegistrationForm()
     if form.validate_on_submit():
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+        # TODO: stop hard coding this
+        course1 = 'CPSC571'
+        course2 = 'CPSC441'
+        course3 = 'CPSC530'
         user = User(username=form.username.data,
                     email=form.email.data,
                     password=hashed_password,
+                    current_course_1=course1,
+                    current_course_2=course2,
+                    current_course_3=course3,
                     role=form.role.data)
         db.session.add(user)
         db.session.commit()
@@ -123,6 +136,19 @@ def courses():
 @app.route("/IO")
 def IO():
     return render_template('IO.html')
+
+
+@app.route("/assignments/current", methods=['GET', 'POST'])
+@login_required
+def view_assignments():
+    posts = Post.query.filter(((Post.course == current_user.current_course_1) |
+                              (Post.course == current_user.current_course_2) |
+                              (Post.course == current_user.current_course_3) |
+                              (Post.course == current_user.current_course_4) |
+                              (Post.course == current_user.current_course_5) |
+                              (Post.course == current_user.current_course_6))
+                              & Post.assignment_flag == 1).all()
+    return render_template('home.html', posts=posts)
 
 
 @app.route("/post/new", methods=['GET', 'POST'])

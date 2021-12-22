@@ -19,6 +19,12 @@ class User(db.Model, UserMixin):
     posts = db.relationship('Post', backref='author', lazy=True)
     # 0 = Student, 1 = Teacher, 2 = Admin
     role = db.Column(db.Integer, nullable=False)
+    current_course_1 = db.Column(db.String(20), nullable=True)
+    current_course_2 = db.Column(db.String(20), nullable=True)
+    current_course_3 = db.Column(db.String(20), nullable=True)
+    current_course_4 = db.Column(db.String(20), nullable=True)
+    current_course_5 = db.Column(db.String(20), nullable=True)
+    current_course_6 = db.Column(db.String(20), nullable=True)
     pastCpscCourses = db.Column(db.String(1000), nullable=True)
     pastOtherCourses = db.Column(db.String(1000), nullable=True)
 

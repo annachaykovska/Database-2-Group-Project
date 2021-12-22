@@ -71,7 +71,9 @@
                             <a class="nav-item nav-link" href="{{ url_for('new_assignment') }}">New Assignment</a>
                         </li>
                     {% else %}
-                        <li class="list-group-item list-group-item-light">Submit Assignments</li>
+                        <li class="list-group-item list-group-item-light">
+                            <a class="nav-item nav-link" href="{{ url_for('view_assignments') }}">View Assignments</a>
+                        </li>
                     {% endif %}
                 {% else %}
                   <p>Add navigation for not logged in</p>
