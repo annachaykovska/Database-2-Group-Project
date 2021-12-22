@@ -1,0 +1,53 @@
+{% extends "layout.html" %}
+{% block content %}
+
+    {% for prof in teachingProfs %}
+        <h2><a class="article-title" href="{{ prof.Prof }}">{{ prof.Prof }}</a></h2>
+        <p class="article-content">Course: {{ prof.CourseCode }}</p>
+        <p class="article-content">{{ prof.Term }} {{ prof.Section }}</p>
+        <form method="POST" action="" enctype="multipart/form-data">
+            {{ form.hidden_tag() }}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">{{ legend }}</legend>
+                <div class="form-group">
+                    {{ form.content.label(class="form-control-label") }}
+                    {{ form.content(class="form-control form-control-lg") }}
+                </div>
+                <div class="form-group">
+                    {{ form.rating.label(class="form-control-label") }}
+                    {{ form.rating(class="form-control form-control-lg") }}
+                </div>
+            </fieldset>
+            <div class="form-group">
+                {{ form.submit(class="btn btn-outline-info") }}
+            </div>
+        </form>
+    {% endfor %}
+
+<!--{% for prof in teachingProfs %}
+This is just a Facade
+<article class="media content-section">
+    <div class="media-body">
+        <h2><a class="article-title" href="{{ prof.Prof }}">{{ prof.Prof }}</a></h2>
+        <p class="article-content">Course: {{ prof.CourseCode }}</p>
+        <p class="article-content">{{ prof.Term }} {{ prof.Section }}</p>
+        <form>
+            <label for="Comments">Comments:</label><br>
+            <textarea id="Comments" name="Comments" value="What did this prof do well? What could be improved?"> </textarea><br>
+            <label for="Stars">Star Rating:</label><br>
+            <label class="rating-label">
+                <strong>Rating</strong>
+                <input class="rating"
+                       max="5"
+                       oninput="this.style.setProperty('--value', this.value)"
+                       step="0.5"
+                       type="range"
+                       value="2.5">
+            </label>
+            <input type="submit" value="Submit">
+        </form>
+
+    </div>
+</article>
+{% endfor %}-->
+{% endblock content %}

@@ -61,10 +61,11 @@
         <div class="col-md-4">
           <div class="content-section">
             <h3>Navigation</h3>
-              <ul class="list-group">
+            <ul class="list-group">
                 {% if current_user.is_authenticated %}
                     {% if current_user.role == 0 %}
                         <li class="list-group-item list-group-item-light"><a href="{{ url_for('CourseEnrollment') }}">Course Enrollment</a></li>
+                        <li class="list-group-item list-group-item-light"><a href="{{ url_for('RateProfessors') }}">Rate Professors</a></li>
                     {% endif %}
                     {% if current_user.role != 0 %}
                         <li class="list-group-item list-group-item-light">

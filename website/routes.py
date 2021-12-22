@@ -4,8 +4,9 @@ from io import BytesIO
 import pytz
 from flask import render_template, flash, redirect, url_for, request, abort, send_file
 from website import app, db, bcrypt
-from website.models import Courses, PreReq, AntiReq, User, Post, OtherCourses, offeredCourses, Submission
-from website.forms import RegistrationForm, LoginForm, PostForm, UpdateAccountForm, SubmitAssignmentForm
+from website.models import Courses, PreReq, AntiReq, User, Post, OtherCourses, offeredCourses, Submission, \
+    professorRatings
+from website.forms import RegistrationForm, LoginForm, PostForm, UpdateAccountForm, SubmitAssignmentForm, RateForm
 from flask_login import login_user, current_user, logout_user, login_required, AnonymousUserMixin
 
 
@@ -148,7 +149,27 @@ def AssignProf():
 @app.route("/CourseEnrollment")
 def CourseEnrollment():
     offerdCourses = offeredCourses.query.all()
-    return render_template('CourseEnrollment.html', offerdCourses=offerdCourses)
+    return render_template('CourseEnrollment.html', offerdCourses = offerdCourses)
+
+
+@app.route("/RateProfessors", methods=['GET', 'POST'])
+def RateProfessors():
+    teachingProfs = offeredCourses.query.all()
+    counter = professorRatings.query.first()
+    form = RateForm()
+    if form.validate_on_submit():
+        studentRate = professorRatings( CourseCode = "",
+                                        Prof = "",
+                                        Term = "",
+                                        Section = "",
+                                        Rating = form.rating.data,
+                                        Comments = form.content.data,
+                                        ID = int(counter.ID) + 1
+                                        )
+        db.session.add(studentRate)
+        db.session.commit()
+    #Requires getting the currentUser and querying against the courses they're taking in another DB
+    return render_template('RateProfessors.html', teachingProfs = teachingProfs, form = form)
 
 
 @app.route("/assignments/current", methods=['GET', 'POST'])
