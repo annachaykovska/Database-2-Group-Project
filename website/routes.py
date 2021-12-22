@@ -3,8 +3,8 @@ from io import BytesIO
 
 from flask import render_template, flash, redirect, url_for, request, abort, send_file
 from website import app, db, bcrypt
-from website.models import Courses, PreReq, AntiReq, User, Post, OtherCourses, offeredCourses
-from website.forms import RegistrationForm, LoginForm, PostForm, UpdateAccountForm
+from website.models import Courses, PreReq, AntiReq, User, Post, OtherCourses, offeredCourses, Submission
+from website.forms import RegistrationForm, LoginForm, PostForm, UpdateAccountForm, SubmitAssignmentForm
 from flask_login import login_user, current_user, logout_user, login_required, AnonymousUserMixin
 
 
@@ -138,14 +138,17 @@ def courses():
 def IO():
     return render_template('IO.html')
 
+
 @app.route("/AssignProf")
 def AssignProf():
     return render_template('AssignProf.html')
 
+
 @app.route("/CourseEnrollment")
 def CourseEnrollment():
     offerdCourses = offeredCourses.query.all()
-    return render_template('CourseEnrollment.html', offerdCourses = offerdCourses)
+    return render_template('CourseEnrollment.html', offerdCourses=offerdCourses)
+
 
 @app.route("/assignments/current", methods=['GET', 'POST'])
 @login_required
@@ -160,10 +163,22 @@ def view_assignments():
     return render_template('home.html', posts=posts, addSubmissionButton=True)
 
 
-@app.route("/assignments/submit", methods=['GET', 'POST'])
+@app.route("/assignments/submit/<int:post_id>", methods=['GET', 'POST'])
 @login_required
-def submission():
-    return render_template('submission.html')
+def submit_assignment(post_id):
+    post = Post.query.get_or_404(post_id)
+    form = SubmitAssignmentForm()
+    if form.validate_on_submit():
+        submission = Submission(submission_notes=form.content)
+        file_data = request.files.get(form.submissionFile.name)
+        if file_data:
+            submission.file_name = form.submissionFile.name
+            submission.file_data = file_data.read()
+        db.session.add(submission)
+        db.session.commit()
+        flash('Your submission has been successful!', 'success')
+        return redirect(url_for('view_assignments'))
+    return render_template('submission.html', form=form, post=post)
 
 
 @app.route("/post/new", methods=['GET', 'POST'])

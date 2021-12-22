@@ -48,9 +48,14 @@ class Post(db.Model):
         return f"Post('{self.title}', '{self.date_posted}')"
 
 
-class Submissions(db.Model):
+class Submission(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     post_id = db.Column(db.Integer, db.ForeignKey('post.id'), nullable=False)
+    submitter_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    submission_notes = db.Column(db.Text, nullable=True)
+    grading_notes = db.Column(db.Text, nullable=True)
+    grade = db.Column(db.Float, default=0.0)
+    grader_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     date_submitted = db.Column(db.DateTime, nullable=False, default=datetime.now(timezone.utc).astimezone())
     file_name = db.Column(db.String(100), nullable=True)
     file_data = db.Column(db.LargeBinary, nullable=True)

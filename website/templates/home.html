@@ -28,9 +28,11 @@
                 <p>File Name: {{post.file_name}}</p>
             {% endif %}
             {% if addSubmissionButton %}
-                <form onclick="window.location.href ='{{ url_for('submission', post_id=post.id) }}';" method="POST">
-                    <input class="btn btn-warning" type="button" value="Add a Submission">
-                </form>
+<!--                <form onclick="window.location.href ='{{ url_for('submit_assignment', post_id=post.id) }}';" method="POST">-->
+<!--                    <input class="btn btn-warning" type="button" value="Add a Submission">-->
+<!--                </form>-->
+<!--              <button class="btn btn-warning" type="button" onclick="window.location.href='{{ url_for('submit_assignment', post_id=post.id) }}';">Add a Submission</button>-->
+                <a class="btn btn-warning btn-sm mt-1 mb-1" href="{{ url_for('submit_assignment', post_id=post.id) }}">Add a Submission</a>
             {% endif %}
           </div>
         </article>

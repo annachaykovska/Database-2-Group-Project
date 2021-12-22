@@ -51,7 +51,11 @@ class PostForm(FlaskForm):
     submit = SubmitField('Post')
 
 
-# class SubmitAssignmentForm(FlaskForm):
+class SubmitAssignmentForm(FlaskForm):
+    submissionFile = FileField('submissionFile')
+    content = TextAreaField('Comment', validators=[DataRequired()])
+    submit = SubmitField('Post')
+
 
 class MultiCheckboxField(SelectMultipleField):
     widget = widgets.ListWidget(prefix_label=False)

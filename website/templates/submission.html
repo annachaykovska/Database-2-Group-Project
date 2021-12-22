@@ -1,4 +1,35 @@
 {% extends "layout.html" %}
 {% block content %}
-    <a>"This is submission time"</a>
+    <div class="content-section">
+    <form method="POST" action="" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+        <fieldset class="form-group">
+            <h5>Deliverable: {{post.title}}</h5>
+            <h6>Course: {{post.course}}</h6>
+            {% if post.due_date %}
+                <h6> Due Date: {{ post.due_date.strftime('%Y-%m-%d %H:%M') }}</h6>
+            {% endif %}
+            <div class="form-group">
+                {{ form.content.label(class="form-control-label") }}
+                {% if form.content.errors %}
+                    {{ form.content(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.content.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.content(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.csrf_token }}
+                {{form.submissionFile}}
+            </div>
+        </fieldset>
+        <div class="form-group">
+            {{ form.submit(class="btn btn-outline-info") }}
+        </div>
+    </form>
+</div>
 {% endblock content %}
