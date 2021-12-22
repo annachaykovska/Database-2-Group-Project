@@ -1,6 +1,7 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from io import BytesIO
 
+import pytz
 from flask import render_template, flash, redirect, url_for, request, abort, send_file
 from website import app, db, bcrypt
 from website.models import Courses, PreReq, AntiReq, User, Post, OtherCourses, offeredCourses, Submission
@@ -168,8 +169,17 @@ def view_assignments():
 def submit_assignment(post_id):
     post = Post.query.get_or_404(post_id)
     form = SubmitAssignmentForm()
+    if post.due_date:
+        # now = pytz.utc.localize(datetime.now())
+        # TODO: unhardcode this heh
+        now = datetime(2021, 12, 21, 1, 1, 1)
+        if now > post.due_date:
+            flash('Past Due Date', 'danger')
+            return redirect(url_for('view_assignments'))
     if form.validate_on_submit():
-        submission = Submission(submission_notes=form.content)
+        submission = Submission(post_id=post_id,
+                                submitter_id=current_user.id,
+                                submission_notes=form.content.data)
         file_data = request.files.get(form.submissionFile.name)
         if file_data:
             submission.file_name = form.submissionFile.name
