@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+{% block content %}
+<!--    {% for submission in submissions %}-->
+<!--        <article class="media content-section">-->
+<!--          <div class="media-body">-->
+<!--            <h2><a class="article-title">{{ submission.assignment_title }}</a></h2>-->
+<!--            <h6>{{submission.course}}</h6>-->
+<!--            <p class="mr-2">Date Submitted: {{ submission.date_submitted.strftime('%Y-%m-%d %H:%M') }}</p>-->
+<!--            <p class="mr-2">Submitting User: Anonymous</p>-->
+<!--            <h6>Comments</h6>-->
+<!--            <p class="article-content">{{ submission.submission_notes }}</p>-->
+<!--            {% if submission.file_name %}-->
+<!--                <form action="{{ url_for('post_file', post_id=submission.id) }}" method="POST">-->
+<!--                    <input class="btn btn-info" type="submit" value="Download File">-->
+<!--                </form>-->
+<!--                <p>File Name: {{submission.file_name}}</p>-->
+<!--            {% endif %}-->
+<!--            <a class="btn btn-warning btn-sm mt-1 mb-1" href="{{ url_for('grade_submissions', submission_id=submission.id) }}">Grade Submission</a>-->
+<!--          </div>-->
+<!--        </article>-->
+<!--    {% endfor %}-->
+<p>Grade time</p>
+{% endblock content %}

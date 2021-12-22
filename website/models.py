@@ -58,6 +58,7 @@ class Submission(db.Model):
     grading_notes = db.Column(db.Text, nullable=True)
     grade = db.Column(db.Float, default=0.0)
     grader_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
+    graded_flag = db.Column(db.Boolean, nullable=False, default=False)
     date_submitted = db.Column(db.DateTime, nullable=False, default=datetime.now(timezone.utc).astimezone())
     file_name = db.Column(db.String(100), nullable=True)
     file_data = db.Column(db.LargeBinary, nullable=True)

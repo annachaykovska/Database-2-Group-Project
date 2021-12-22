@@ -237,10 +237,17 @@ def grade_submissions(submission_id):
         submission.grading_notes = form.comments.data
         submission.grade = form.grade.data
         submission.grader_id = current_user.id
+        submission.graded_flag = True
         db.session.commit()
         flash('Assignment has been graded successfully!', 'success')
         return redirect(url_for('view_submissions'))
     return render_template('grade_submissions.html', form=form, submission=submission)
+
+
+@app.route("/view_grades", methods=['GET', 'POST'])
+@login_required
+def view_grades():
+    return render_template('view_grades.html')
 
 
 @app.route("/post/new", methods=['GET', 'POST'])

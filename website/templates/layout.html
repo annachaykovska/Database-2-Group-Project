@@ -73,6 +73,8 @@
                         <li class="list-group-item list-group-item-light"><a href="{{ url_for('view_submissions') }}">View Submissions</a></li>
                     {% endif %}
                     <li class="list-group-item list-group-item-light"><a href="{{ url_for('view_assignments') }}">Assignments</a></li>
+                    <li class="list-group-item list-group-item-light"><a href="{{ url_for('view_grades') }}">Grades</a></li>
+
                     {% if current_user.role == 2 %}
                       <li class="list-group-item list-group-item-light"><a href="{{ url_for('AssignProf') }}">Assign Professors</a></li>
                     {% endif %}
