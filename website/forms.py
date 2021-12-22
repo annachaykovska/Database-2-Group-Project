@@ -1,7 +1,7 @@
 from flask_login import current_user
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, SelectField, TextAreaField, \
-    SelectMultipleField, widgets
+    SelectMultipleField, widgets, FileField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 from website.models import User
 
@@ -46,6 +46,8 @@ class PostForm(FlaskForm):
                                   ('CPSC 530', 'CPSC 530'), ('CPSC 231', 'CPSC 231')],
                          validators=[DataRequired()])
     content = TextAreaField('Content', validators=[DataRequired()])
+    gradingScale = TextAreaField('Grading Scale')
+    assignmentFile = FileField('assignmentFile')
     submit = SubmitField('Post')
 
 

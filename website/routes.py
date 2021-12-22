@@ -1,4 +1,7 @@
-from flask import render_template, flash, redirect, url_for, request, abort
+from datetime import datetime
+from io import BytesIO
+
+from flask import render_template, flash, redirect, url_for, request, abort, send_file
 from website import app, db, bcrypt
 from website.models import Courses, PreReq, AntiReq, User, Post, OtherCourses, offeredCourses
 from website.forms import RegistrationForm, LoginForm, PostForm, UpdateAccountForm
@@ -117,16 +120,6 @@ def about():
 def courses():
     return render_template('courses.html')
 
-#
-# @app.route("/students")
-# def students():
-#     return render_template('students.html')
-#
-#
-# @app.route("/instructors")
-# def instructors():
-#     return render_template('instructors.html')
-
 
 @app.route("/IO")
 def IO():
@@ -146,13 +139,52 @@ def CourseEnrollment():
 def new_post():
     form = PostForm()
     if form.validate_on_submit():
-        post = Post(title=form.title.data, content=form.content.data, author=current_user, course=form.course.data)
+        file_data = request.files.get(form.assignmentFile.name)
+        post = Post(title=form.title.data,
+                    content=form.content.data,
+                    author=current_user,
+                    course=form.course.data,
+                    assignment_flag=False)
+        if file_data:
+            post.file_name = form.assignmentFile.name
+            post.file_data = file_data.read()
         db.session.add(post)
         db.session.commit()
         flash('Your post has been created!', 'success')
         return redirect(url_for('home'))
     return render_template('create_post.html', title='New Post',
-                           form=form, legend='New Post')
+                           form=form, legend='New Post', assignment=False)
+
+
+@app.route("/assignment/new", methods=['GET', 'POST'])
+@login_required
+def new_assignment():
+    form = PostForm()
+    if form.validate_on_submit():
+        file_data = request.files.get(form.assignmentFile.name)
+        dueString = request.form.get('duetime')
+        if dueString:
+            # Todo: Validate that the input is later than right now if you feel like it
+            due_date = datetime.strptime(dueString, '%Y-%m-%dT%H:%M')
+        else:
+            due_date = None
+        post = Post(title=form.title.data,
+                    content=form.content.data,
+                    author=current_user,
+                    course=form.course.data,
+                    grading_scale=form.gradingScale.data,
+                    due_date=due_date,
+                    assignment_flag=True)
+        if file_data:
+            post.file_name = file_data.filename
+            post.file_data = file_data.read()
+
+        db.session.add(post)
+        db.session.commit()
+        flash('Your new assignment has been created!', 'success')
+        return redirect(url_for('home'))
+    return render_template('create_post.html', title='New Assignment',
+                           form=form, legend='New Assignment', assignment=True)
 
 
 @app.route("/post/<int:post_id>")
@@ -161,10 +193,17 @@ def post(post_id):
     return render_template('post.html', title=post.title, course=post.course, post=post)
 
 
+@app.route("/post/<int:post_id>/view", methods=['GET', 'POST'])
+def post_file(post_id):
+    post = Post.query.get_or_404(post_id)
+    return send_file(BytesIO(post.file_data), attachment_filename=post.file_name, as_attachment=True)
+
+
 @app.route("/post/<int:post_id>/update", methods=['GET', 'POST'])
 @login_required
 def update_post(post_id):
     post = Post.query.get_or_404(post_id)
+    assignmentFlag = post.assignment_flag
     if post.author != current_user:
         abort(403)
     form = PostForm()
@@ -172,6 +211,16 @@ def update_post(post_id):
         post.title = form.title.data
         post.content = form.content.data
         post.course = form.course.data
+        file_data = request.files.get(form.assignmentFile.name)
+        dueString = request.form.get('duetime')
+        if dueString:
+            # Todo: Validate that the input is later than right now if you feel like it
+            post.due_date = datetime.strptime(dueString, '%Y-%m-%dT%H:%M')
+        else:
+            post.due_date = None
+        if file_data:
+            post.file_name = form.assignmentFile.name
+            post.file_data = file_data.read()
         db.session.commit()
         flash('Your post has been updated!', 'success')
         return redirect(url_for('post', post_id=post.id))
@@ -179,8 +228,11 @@ def update_post(post_id):
         form.title.data = post.title
         form.content.data = post.content
         form.course.data = post.course
+        if assignmentFlag:
+            form.gradingScale.data = post.grading_scale
+
     return render_template('create_post.html', title='Update Post',
-                           form=form, legend='Update Post')
+                           form=form, legend='Update Post', assignment=assignmentFlag)
 
 
 @app.route("/post/<int:post_id>/delete", methods=['POST'])
@@ -194,3 +246,8 @@ def delete_post(post_id):
     flash('Your post has been deleted!', 'success')
     return redirect(url_for('home'))
 
+
+# @app.route("/teacher-assignments")
+# @login_required
+# def view_assignments():
+#     return render_template('assignments.html', title='Assignments')
