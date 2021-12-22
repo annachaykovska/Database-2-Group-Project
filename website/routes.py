@@ -6,21 +6,24 @@ from flask import render_template, flash, redirect, url_for, request, abort, sen
 from website import app, db, bcrypt
 from website.models import Courses, PreReq, AntiReq, User, Post, OtherCourses, offeredCourses, Submission, \
     professorRatings
-from website.forms import RegistrationForm, LoginForm, PostForm, UpdateAccountForm, SubmitAssignmentForm, RateForm
+from website.forms import RegistrationForm, LoginForm, PostForm, UpdateAccountForm, SubmitAssignmentForm, RateForm, \
+    GradeSubmissionForm
 from flask_login import login_user, current_user, logout_user, login_required, AnonymousUserMixin
 
 
 @app.route("/")
 @app.route("/home")
 def home():
-    # posts = Post.query.filter(((Post.course == current_user.current_course_1) |
-    #                            (Post.course == current_user.current_course_2) |
-    #                            (Post.course == current_user.current_course_3) |
-    #                            (Post.course == current_user.current_course_4) |
-    #                            (Post.course == current_user.current_course_5) |
-    #                            (Post.course == current_user.current_course_6))
-    #                           & Post.assignment_flag == 0).all()
-    posts = Post.query.all()
+    posts = []
+    if current_user.is_authenticated:
+        posts = Post.query.filter(((Post.course == current_user.current_course_1) |
+                                   (Post.course == current_user.current_course_2) |
+                                   (Post.course == current_user.current_course_3) |
+                                   (Post.course == current_user.current_course_4) |
+                                   (Post.course == current_user.current_course_5) |
+                                   (Post.course == current_user.current_course_6))
+                                  & Post.assignment_flag == 0).all()
+    # posts = Post.query.all()
     return render_template('home.html', posts=posts, addSubmissionButton=False)
 
 
@@ -200,16 +203,57 @@ def submit_assignment(post_id):
     if form.validate_on_submit():
         submission = Submission(post_id=post_id,
                                 submitter_id=current_user.id,
-                                submission_notes=form.content.data)
+                                submission_notes=form.content.data,
+                                assignment_title=post.title,
+                                course=post.course)
         file_data = request.files.get(form.submissionFile.name)
         if file_data:
-            submission.file_name = form.submissionFile.name
+            submission.file_name = file_data.filename
             submission.file_data = file_data.read()
         db.session.add(submission)
         db.session.commit()
         flash('Your submission has been successful!', 'success')
         return redirect(url_for('view_assignments'))
-    return render_template('submission.html', form=form, post=post)
+    return render_template('new_submission.html', form=form, post=post)
+
+
+@app.route("/assignments/view_submissions/", methods=['GET', 'POST'])
+@login_required
+def view_submissions():
+    submissions = Submission.query.filter((Submission.course == current_user.current_course_1) |
+                                          (Submission.course == current_user.current_course_2) |
+                                          (Submission.course == current_user.current_course_3) |
+                                          (Submission.course == current_user.current_course_4) |
+                                          (Submission.course == current_user.current_course_5) |
+                                          (Submission.course == current_user.current_course_6)).all()
+    return render_template('view_submissions.html', submissions=submissions)
+
+
+@app.route("/assignments/grade_submissions/<int:submission_id>", methods=['GET', 'POST'])
+@login_required
+def grade_submissions(submission_id):
+    submission = Submission.query.get_or_404(submission_id)
+    form = GradeSubmissionForm()
+    if form.validate_on_submit():
+        # Update the submission
+        submission.grading_notes = form.comments.data
+        submission.grade = form.grade.data
+        submission.grader_id = current_user.id
+        submission.graded_flag = True
+        db.session.commit()
+        flash('Assignment has been graded successfully!', 'success')
+        return redirect(url_for('view_submissions'))
+    return render_template('grade_submissions.html', form=form, submission=submission)
+
+
+@app.route("/view_grades", methods=['GET', 'POST'])
+@login_required
+def view_grades():
+    if current_user.role == 0:
+        submissions = Submission.query.filter(Submission.submitter_id == current_user.id)
+    else:
+        submissions = Submission.query.filter(Submission.grader_id == current_user.id)
+    return render_template('view_grades.html', submissions=submissions)
 
 
 @app.route("/post/new", methods=['GET', 'POST'])
@@ -224,7 +268,7 @@ def new_post():
                     course=form.course.data,
                     assignment_flag=False)
         if file_data:
-            post.file_name = form.assignmentFile.name
+            post.file_name = file_data.filename
             post.file_data = file_data.read()
         db.session.add(post)
         db.session.commit()
@@ -297,7 +341,7 @@ def update_post(post_id):
         else:
             post.due_date = None
         if file_data:
-            post.file_name = form.assignmentFile.name
+            post.file_name = file_data.filename
             post.file_data = file_data.read()
         db.session.commit()
         flash('Your post has been updated!', 'success')

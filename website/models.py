@@ -53,9 +53,12 @@ class Submission(db.Model):
     post_id = db.Column(db.Integer, db.ForeignKey('post.id'), nullable=False)
     submitter_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     submission_notes = db.Column(db.Text, nullable=True)
+    assignment_title = db.Column(db.String(100), nullable=False)
+    course = db.Column(db.String(100), nullable=True)
     grading_notes = db.Column(db.Text, nullable=True)
     grade = db.Column(db.Float, default=0.0)
     grader_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
+    graded_flag = db.Column(db.Boolean, nullable=False, default=False)
     date_submitted = db.Column(db.DateTime, nullable=False, default=datetime.now(timezone.utc).astimezone())
     file_name = db.Column(db.String(100), nullable=True)
     file_data = db.Column(db.LargeBinary, nullable=True)
@@ -128,7 +131,8 @@ class offeredCourses(db.Model):
     Prof = db.Column(db.String(150), nullable=False)
     Term = db.Column(db.String(10), primary_key=True)
     Section = db.Column(db.String(3), primary_key=True)
-    
+
+
 class professorRatings(db.Model):
     __tablename__ = "professorRatings"
     CourseCode = db.Column(db.String(7), primary_key=True)
@@ -140,15 +144,15 @@ class professorRatings(db.Model):
     ID = db.Column(db.Integer, primary_key=True)
 
 # TODO: Comment this out if you don't need to make a new database
-db.create_all()
-for c in courseList:
-    db.session.add(Courses(**c))
-for a in antireqList:
-    db.session.add(AntiReq(**a))
-for p in prereqList:
-    db.session.add(PreReq(**p))
-for o in otherCoursesList:
-    db.session.add(OtherCourses(**o))
-for f in offeredCourseList:
-    db.session.add(offeredCourses(**f))
-db.session.commit()
+# db.create_all()
+# for c in courseList:
+#     db.session.add(Courses(**c))
+# for a in antireqList:
+#     db.session.add(AntiReq(**a))
+# for p in prereqList:
+#     db.session.add(PreReq(**p))
+# for o in otherCoursesList:
+#     db.session.add(OtherCourses(**o))
+# for f in offeredCourseList:
+#     db.session.add(offeredCourses(**f))
+# db.session.commit()
