@@ -1,6 +1,7 @@
 {% extends "layout.html" %}
 {% block content %}
-    {% for prof in teachingProfs %}
+{% for prof in teachingProfs %}
+This is just a Facade
 <article class="media content-section">
     <div class="media-body">
         <h2><a class="article-title" href="{{ prof.Prof }}">{{ prof.Prof }}</a></h2>
@@ -24,5 +25,5 @@
 
     </div>
 </article>
-    {% endfor %}
+{% endfor %}
 {% endblock content %}

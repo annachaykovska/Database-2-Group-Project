@@ -50,6 +50,17 @@ class PostForm(FlaskForm):
     assignmentFile = FileField('assignmentFile')
     submit = SubmitField('Post')
 
+class RateForm(FlaskForm):
+
+    content = TextAreaField('Content')
+    rating =  SelectField('Course',
+                         choices=[('1', '1'),('1.5', '1.5'),
+                                  ('2', '2'),('2.5', '2.5'),
+                                  ('3', '3'),('3.5', '3.5'),
+                                  ('4', '4'),('4.5', '4.5'),
+                                  ('5', '5')],
+                         validators=[DataRequired()])
+    submit = SubmitField('Rate')
 
 class MultiCheckboxField(SelectMultipleField):
     widget = widgets.ListWidget(prefix_label=False)

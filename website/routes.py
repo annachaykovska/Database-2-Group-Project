@@ -3,8 +3,8 @@ from io import BytesIO
 
 from flask import render_template, flash, redirect, url_for, request, abort, send_file
 from website import app, db, bcrypt
-from website.models import Courses, PreReq, AntiReq, User, Post, OtherCourses, offeredCourses
-from website.forms import RegistrationForm, LoginForm, PostForm, UpdateAccountForm
+from website.models import Courses, PreReq, AntiReq, User, Post, OtherCourses, offeredCourses,professorRatings
+from website.forms import RegistrationForm, LoginForm, PostForm, UpdateAccountForm, RateForm
 from flask_login import login_user, current_user, logout_user, login_required
 
 
@@ -131,14 +131,28 @@ def AssignProf():
 
 @app.route("/CourseEnrollment")
 def CourseEnrollment():
-    offerdCourses = offeredCourses.query.all()
+    offerdCourses = offeredCourses.query.all() 
     return render_template('CourseEnrollment.html', offerdCourses = offerdCourses)
 
 @app.route("/RateProfessors")
 def RateProfessors():
     teachingProfs = offeredCourses.query.all()
-    #Requires getting the current user's username and querying against the courses they're taking
+    counter = professorRatings.query.first()
+    form = RateForm()
+    if form.validate_on_submit():
+        studentRate = professorRatings( CourseCode = "",
+                                        Prof = "",
+                                        Term = "",
+                                        Section = "",
+                                        Rating = form.rating.data,
+                                        Comments = form.content.data,
+                                        ID = counter.ID + 1
+                                        )
+        db.session.add(studentRate)
+        db.session.commit()
+    #Requires getting the currentUser and querying against the courses they're taking in another DB
     return render_template('RateProfessors.html', teachingProfs = teachingProfs)
+
 
 @app.route("/post/new", methods=['GET', 'POST'])
 @login_required
