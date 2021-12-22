@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+{% block content %}
+    {% for prof in teachingProfs %}
+<article class="media content-section">
+    <div class="media-body">
+        <h2><a class="article-title" href="{{ prof.Prof }}">{{ prof.Prof }}</a></h2>
+        <p class="article-content">Course: {{ prof.CourseCode }}</p>
+        <p class="article-content">{{ prof.Term }} {{ prof.Section }}</p>
+        <form>
+            <label for="Comments">Comments:</label><br>
+            <textarea id="Comments" name="Comments" value="What did this prof do well? What could be improved?"> </textarea><br>
+            <label for="Stars">Star Rating:</label><br>
+            <label class="rating-label">
+                <strong>Rating</strong>
+                <input class="rating"
+                       max="5"
+                       oninput="this.style.setProperty('--value', this.value)"
+                       step="0.5"
+                       type="range"
+                       value="2.5">
+            </label>
+            <input type="submit" value="Submit">
+        </form>
+
+    </div>
+</article>
+    {% endfor %}
+{% endblock content %}

@@ -134,6 +134,12 @@ def CourseEnrollment():
     offerdCourses = offeredCourses.query.all()
     return render_template('CourseEnrollment.html', offerdCourses = offerdCourses)
 
+@app.route("/RateProfessors")
+def RateProfessors():
+    teachingProfs = offeredCourses.query.all()
+    #Requires getting the current user's username and querying against the courses they're taking
+    return render_template('RateProfessors.html', teachingProfs = teachingProfs)
+
 @app.route("/post/new", methods=['GET', 'POST'])
 @login_required
 def new_post():
