@@ -1,4 +1,50 @@
 {% extends "layout.html" %}
 {% block content %}
-<a>Nice</a>
+<div class="content-section">
+    <h2>Submission</h2>
+    <article class="media content-section">
+          <div class="media-body">
+            <h4><a class="article-title">{{ submission.assignment_title }}</a></h4>
+            <h6>{{submission.course}}</h6>
+            <p class="mr-2">Date Submitted: {{ submission.date_submitted.strftime('%Y-%m-%d %H:%M') }}</p>
+            <p class="mr-2">Submitting User: Anonymous</p>
+            <h6>Comments</h6>
+            <p class="article-content">{{ submission.submission_notes }}</p>
+            {% if submission.file_name %}
+                <form action="{{ url_for('post_file', post_id=submission.id) }}" method="POST">
+                    <input class="btn btn-info" type="submit" value="Download File">
+                </form>
+                <p>File Name: {{submission.file_name}}</p>
+            {% endif %}
+          </div>
+    </article>
+        <h2>Grading</h2>
+        <article class="media content-section">
+              <form method="POST" action="" enctype="multipart/form-data">
+            {{ form.hidden_tag() }}
+            <fieldset class="form-group">
+                <div class="form-group">
+                    {{ form.comments.label(class="form-control-label") }}
+                    {% if form.comments.errors %}
+                        {{ form.comments(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.comments.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.comments(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+            </fieldset>
+            <div class="form-group">
+                {{ form.grade.label(class="form-control-label") }}
+                {{ form.grade(class="btn btn-outline-info") }}
+            </div>
+            <div class="form-group">
+                {{ form.submit(class="btn btn-outline-info") }}
+            </div>
+        </form>
+    </article>
+</div>
 {% endblock content %}

@@ -1,7 +1,7 @@
 from flask_login import current_user
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, SelectField, TextAreaField, \
-    SelectMultipleField, widgets, FileField
+    SelectMultipleField, widgets, FileField, DecimalField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 from website.models import User
 
@@ -50,22 +50,29 @@ class PostForm(FlaskForm):
     assignmentFile = FileField('assignmentFile')
     submit = SubmitField('Post')
 
-class RateForm(FlaskForm):
 
+class RateForm(FlaskForm):
     content = TextAreaField('Content')
-    rating =  SelectField('Rating',
-                         choices=[('1', '1'),('1.5', '1.5'),
-                                  ('2', '2'),('2.5', '2.5'),
-                                  ('3', '3'),('3.5', '3.5'),
-                                  ('4', '4'),('4.5', '4.5'),
+    rating = SelectField('Rating',
+                         choices=[('1', '1'), ('1.5', '1.5'),
+                                  ('2', '2'), ('2.5', '2.5'),
+                                  ('3', '3'), ('3.5', '3.5'),
+                                  ('4', '4'), ('4.5', '4.5'),
                                   ('5', '5')],
                          validators=[DataRequired()])
     submit = SubmitField('Rate')
+
 
 class SubmitAssignmentForm(FlaskForm):
     submissionFile = FileField('submissionFile')
     content = TextAreaField('Comment', validators=[DataRequired()])
     submit = SubmitField('Post')
+
+
+class GradeSubmissionForm(FlaskForm):
+    comments = TextAreaField('Grading Comments', validators=[DataRequired()])
+    grade = DecimalField('Grade (out of 100%)', default=0.0, places=2, validators=[DataRequired()])
+    submit = SubmitField('Submit Grade')
 
 
 class MultiCheckboxField(SelectMultipleField):

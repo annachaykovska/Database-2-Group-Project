@@ -6,7 +6,8 @@ from flask import render_template, flash, redirect, url_for, request, abort, sen
 from website import app, db, bcrypt
 from website.models import Courses, PreReq, AntiReq, User, Post, OtherCourses, offeredCourses, Submission, \
     professorRatings
-from website.forms import RegistrationForm, LoginForm, PostForm, UpdateAccountForm, SubmitAssignmentForm, RateForm
+from website.forms import RegistrationForm, LoginForm, PostForm, UpdateAccountForm, SubmitAssignmentForm, RateForm, \
+    GradeSubmissionForm
 from flask_login import login_user, current_user, logout_user, login_required, AnonymousUserMixin
 
 
@@ -229,7 +230,11 @@ def view_submissions():
 @app.route("/assignments/grade_submissions/<int:submission_id>", methods=['GET', 'POST'])
 @login_required
 def grade_submissions(submission_id):
-    return render_template('grade_submissions.html')
+    submission = Submission.query.get_or_404(submission_id)
+    form = GradeSubmissionForm()
+    if form.validate_on_submit():
+        return redirect(url_for('view_submissions'))
+    return render_template('grade_submissions.html', form=form, submission=submission)
 
 
 @app.route("/post/new", methods=['GET', 'POST'])
