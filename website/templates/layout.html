@@ -61,31 +61,32 @@
         <div class="col-md-4">
           <div class="content-section">
             <h3>Navigation</h3>
-              <ul class="list-group">
+            <ul class="list-group">
                 {% if current_user.is_authenticated %}
-                    {% if current_user.role != 0 %}
-                        <li class="list-group-item list-group-item-light">
-                            <a class="nav-item nav-link" href="{{ url_for('new_post') }}">New Post</a>
-                        </li>
-                      <li class="list-group-item list-group-item-light">
-                            <a class="nav-item nav-link" href="{{ url_for('new_assignment') }}">New Assignment</a>
-                        </li>
-                    {% else %}
-                        <li class="list-group-item list-group-item-light">Submit Assignments</li>
-                    {% endif %}
-                    {% if current_user.role == 2 %}
-                      <li class="list-group-item list-group-item-light"><a href="{{ url_for('AssignProf') }}">Assign Professors</a></li>
-                    {% endif %}
-                      {% if current_user.role == 0 %}
-                    <li class="list-group-item list-group-item-light"><a href="{{ url_for('CourseEnrollment') }}">Course Enrollment</a></li>
-                    {% endif %}
+                {% if current_user.role != 0 %}
+                <li class="list-group-item list-group-item-light">
+                    <a class="nav-item nav-link" href="{{ url_for('new_post') }}">New Post</a>
+                </li>
+                <li class="list-group-item list-group-item-light">
+                    <a class="nav-item nav-link" href="{{ url_for('new_assignment') }}">New Assignment</a>
+                </li>
                 {% else %}
-                  <p>Add navigation for not logged in</p>
+                <li class="list-group-item list-group-item-light">Submit Assignments</li>
                 {% endif %}
-<!--                <li class="list-group-item list-group-item-light">Announcements</li>-->
-<!--                <li class="list-group-item list-group-item-light">Calendars</li>-->
-<!--                <li class="list-group-item list-group-item-light">etc</li>-->
-              </ul>
+                {% if current_user.role == 2 %}
+                <li class="list-group-item list-group-item-light"><a href="{{ url_for('AssignProf') }}">Assign Professors</a></li>
+                {% endif %}
+                {% if current_user.role == 0 %}
+                <li class="list-group-item list-group-item-light"><a href="{{ url_for('CourseEnrollment') }}">Course Enrollment</a></li>
+                <li class="list-group-item list-group-item-light"><a href="{{ url_for('RateProfessors') }}">Rate Professors</a></li>
+                {% endif %}
+                {% else %}
+                <p>Add navigation for not logged in</p>
+                {% endif %}
+                <!--                <li class="list-group-item list-group-item-light">Announcements</li>-->
+                <!--                <li class="list-group-item list-group-item-light">Calendars</li>-->
+                <!--                <li class="list-group-item list-group-item-light">etc</li>-->
+            </ul>
             </p>
           </div>
         </div>
