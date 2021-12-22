@@ -73,6 +73,12 @@
                     {% else %}
                         <li class="list-group-item list-group-item-light">Submit Assignments</li>
                     {% endif %}
+                    {% if current_user.role == 2 %}
+                      <li class="list-group-item list-group-item-light"><a href="{{ url_for('AssignProf') }}">Assign Professors</a></li>
+                    {% endif %}
+                      {% if current_user.role == 0 %}
+                    <li class="list-group-item list-group-item-light"><a href="{{ url_for('CourseEnrollment') }}">Course Enrollment</a></li>
+                    {% endif %}
                 {% else %}
                   <p>Add navigation for not logged in</p>
                 {% endif %}

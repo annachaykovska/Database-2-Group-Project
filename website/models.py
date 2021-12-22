@@ -2,8 +2,7 @@ from flask_login import UserMixin
 from datetime import datetime, timezone
 
 from website import db, login_manager
-from website.defaultDatabaseEntries import courseList, antireqList, prereqList, otherCoursesList
-
+from website.defaultDatabaseEntries import courseList, antireqList, prereqList, otherCoursesList, offeredCourseList
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -103,15 +102,24 @@ class OtherCourses(db.Model):
     CourseCode = db.Column(db.String(7), primary_key=True)
     Name = db.Column(db.String(150), nullable=False)
 
+class offeredCourses(db.Model):
+    __tablename__ = "offeredCourses"
+    CourseCode = db.Column(db.String(7), primary_key=True)
+    Prof = db.Column(db.String(150), nullable=False)
+    Term = db.Column(db.String(10), primary_key=True)
+    Section = db.Column(db.String(3), primary_key=True)
+    
 
 # TODO: Comment this out if you don't need to make a new database
-# db.create_all()
-# for c in courseList:
-#     db.session.add(Courses(**c))
-# for a in antireqList:
-#     db.session.add(AntiReq(**a))
-# for p in prereqList:
-#     db.session.add(PreReq(**p))
-# for o in otherCoursesList:
-#     db.session.add(OtherCourses(**o))
-# db.session.commit()
+#db.create_all()
+#for c in courseList:
+#    db.session.add(Courses(**c))
+#for a in antireqList:
+#    db.session.add(AntiReq(**a))
+#for p in prereqList:
+#    db.session.add(PreReq(**p))
+#for o in otherCoursesList:
+#    db.session.add(OtherCourses(**o))
+#for f in offeredCourseList:
+#    db.session.add(offeredCourses(**f))
+#db.session.commit()
