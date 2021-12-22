@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+{% block content %}
+    {% for offCourse in offerdCourses %}
+<article class="media content-section">
+    <div class="media-body">
+        <h2><a class="article-title" href="{{ offCourse.CourseCode }}">{{ offCourse.CourseCode }}</a></h2>
+        <p class="article-content">Professor {{ offCourse.Prof }}</p>
+        <p class="article-content">{{ offCourse.Term }} {{ offCourse.Section }}</p>
+    </div>
+</article>
+    {% endfor %}
+{% endblock content %}
