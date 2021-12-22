@@ -233,6 +233,12 @@ def grade_submissions(submission_id):
     submission = Submission.query.get_or_404(submission_id)
     form = GradeSubmissionForm()
     if form.validate_on_submit():
+        # Update the submission
+        submission.grading_notes = form.comments.data
+        submission.grade = form.grade.data
+        submission.grader_id = current_user.id
+        db.session.commit()
+        flash('Assignment has been graded successfully!', 'success')
         return redirect(url_for('view_submissions'))
     return render_template('grade_submissions.html', form=form, submission=submission)
 
