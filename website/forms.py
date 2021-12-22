@@ -53,7 +53,7 @@ class PostForm(FlaskForm):
 class RateForm(FlaskForm):
 
     content = TextAreaField('Content')
-    rating =  SelectField('Course',
+    rating =  SelectField('Rating',
                          choices=[('1', '1'),('1.5', '1.5'),
                                   ('2', '2'),('2.5', '2.5'),
                                   ('3', '3'),('3.5', '3.5'),

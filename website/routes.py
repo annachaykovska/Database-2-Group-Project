@@ -134,7 +134,7 @@ def CourseEnrollment():
     offerdCourses = offeredCourses.query.all() 
     return render_template('CourseEnrollment.html', offerdCourses = offerdCourses)
 
-@app.route("/RateProfessors")
+@app.route("/RateProfessors", methods=['GET', 'POST'])
 def RateProfessors():
     teachingProfs = offeredCourses.query.all()
     counter = professorRatings.query.first()
@@ -146,12 +146,12 @@ def RateProfessors():
                                         Section = "",
                                         Rating = form.rating.data,
                                         Comments = form.content.data,
-                                        ID = counter.ID + 1
+                                        ID = int(counter.ID) + 1
                                         )
         db.session.add(studentRate)
         db.session.commit()
     #Requires getting the currentUser and querying against the courses they're taking in another DB
-    return render_template('RateProfessors.html', teachingProfs = teachingProfs)
+    return render_template('RateProfessors.html', teachingProfs = teachingProfs, form = form)
 
 
 @app.route("/post/new", methods=['GET', 'POST'])

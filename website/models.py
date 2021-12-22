@@ -117,7 +117,7 @@ class professorRatings(db.Model):
     Section = db.Column(db.String(3), nullable=False)
     Rating = db.Column(db.Float, nullable=False)
     Comments = db.Column(db.String(150), nullable=True)
-    ID = db.Column(db.String(150), primary_key=True)
+    ID = db.Column(db.Integer, primary_key=True)
 
 # TODO: Comment this out if you don't need to make a new database
 #db.create_all()
