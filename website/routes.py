@@ -5,20 +5,21 @@ from flask import render_template, flash, redirect, url_for, request, abort, sen
 from website import app, db, bcrypt
 from website.models import Courses, PreReq, AntiReq, User, Post, OtherCourses
 from website.forms import RegistrationForm, LoginForm, PostForm, UpdateAccountForm
-from flask_login import login_user, current_user, logout_user, login_required
+from flask_login import login_user, current_user, logout_user, login_required, AnonymousUserMixin
 
 
 @app.route("/")
 @app.route("/home")
 def home():
-    posts = Post.query.filter(((Post.course == current_user.current_course_1) |
-                               (Post.course == current_user.current_course_2) |
-                               (Post.course == current_user.current_course_3) |
-                               (Post.course == current_user.current_course_4) |
-                               (Post.course == current_user.current_course_5) |
-                               (Post.course == current_user.current_course_6))
-                              & Post.assignment_flag == 0).all()
-    return render_template('home.html', posts=posts)
+    # posts = Post.query.filter(((Post.course == current_user.current_course_1) |
+    #                            (Post.course == current_user.current_course_2) |
+    #                            (Post.course == current_user.current_course_3) |
+    #                            (Post.course == current_user.current_course_4) |
+    #                            (Post.course == current_user.current_course_5) |
+    #                            (Post.course == current_user.current_course_6))
+    #                           & Post.assignment_flag == 0).all()
+    posts = Post.query.all()
+    return render_template('home.html', posts=posts, addSubmissionButton=False)
 
 
 @app.route("/register", methods=['GET', 'POST'])
@@ -148,7 +149,13 @@ def view_assignments():
                               (Post.course == current_user.current_course_5) |
                               (Post.course == current_user.current_course_6))
                               & Post.assignment_flag == 1).all()
-    return render_template('home.html', posts=posts)
+    return render_template('home.html', posts=posts, addSubmissionButton=True)
+
+
+@app.route("/assignments/submit", methods=['GET', 'POST'])
+@login_required
+def submission():
+    return render_template('submission.html')
 
 
 @app.route("/post/new", methods=['GET', 'POST'])

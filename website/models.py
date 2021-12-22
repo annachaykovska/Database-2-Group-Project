@@ -49,6 +49,14 @@ class Post(db.Model):
         return f"Post('{self.title}', '{self.date_posted}')"
 
 
+class Submissions(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    post_id = db.Column(db.Integer, db.ForeignKey('post.id'), nullable=False)
+    date_submitted = db.Column(db.DateTime, nullable=False, default=datetime.now(timezone.utc).astimezone())
+    file_name = db.Column(db.String(100), nullable=True)
+    file_data = db.Column(db.LargeBinary, nullable=True)
+
+
 # This is the structure of the database table to use
 class Courses(db.Model):
     __tablename__ = "CPSCcourses"

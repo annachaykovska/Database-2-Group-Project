@@ -27,6 +27,11 @@
                 </form>
                 <p>File Name: {{post.file_name}}</p>
             {% endif %}
+            {% if addSubmissionButton %}
+                <form onclick="window.location.href ='{{ url_for('submission', post_id=post.id) }}';" method="POST">
+                    <input class="btn btn-warning" type="button" value="Add a Submission">
+                </form>
+            {% endif %}
           </div>
         </article>
     {% endfor %}
