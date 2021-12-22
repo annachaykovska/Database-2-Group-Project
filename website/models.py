@@ -18,6 +18,12 @@ class User(db.Model, UserMixin):
     posts = db.relationship('Post', backref='author', lazy=True)
     # 0 = Student, 1 = Teacher, 2 = Admin
     role = db.Column(db.Integer, nullable=False)
+    current_course_1 = db.Column(db.String(20), nullable=True)
+    current_course_2 = db.Column(db.String(20), nullable=True)
+    current_course_3 = db.Column(db.String(20), nullable=True)
+    current_course_4 = db.Column(db.String(20), nullable=True)
+    current_course_5 = db.Column(db.String(20), nullable=True)
+    current_course_6 = db.Column(db.String(20), nullable=True)
     pastCpscCourses = db.Column(db.String(1000), nullable=True)
     pastOtherCourses = db.Column(db.String(1000), nullable=True)
 
@@ -40,6 +46,19 @@ class Post(db.Model):
 
     def __repr__(self):
         return f"Post('{self.title}', '{self.date_posted}')"
+
+
+class Submission(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    post_id = db.Column(db.Integer, db.ForeignKey('post.id'), nullable=False)
+    submitter_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    submission_notes = db.Column(db.Text, nullable=True)
+    grading_notes = db.Column(db.Text, nullable=True)
+    grade = db.Column(db.Float, default=0.0)
+    grader_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
+    date_submitted = db.Column(db.DateTime, nullable=False, default=datetime.now(timezone.utc).astimezone())
+    file_name = db.Column(db.String(100), nullable=True)
+    file_data = db.Column(db.LargeBinary, nullable=True)
 
 
 # This is the structure of the database table to use
@@ -102,6 +121,7 @@ class OtherCourses(db.Model):
     CourseCode = db.Column(db.String(7), primary_key=True)
     Name = db.Column(db.String(150), nullable=False)
 
+
 class offeredCourses(db.Model):
     __tablename__ = "offeredCourses"
     CourseCode = db.Column(db.String(7), primary_key=True)
@@ -120,15 +140,15 @@ class professorRatings(db.Model):
     ID = db.Column(db.Integer, primary_key=True)
 
 # TODO: Comment this out if you don't need to make a new database
-#db.create_all()
-#for c in courseList:
-#    db.session.add(Courses(**c))
-#for a in antireqList:
-#    db.session.add(AntiReq(**a))
-#for p in prereqList:
-#    db.session.add(PreReq(**p))
-#for o in otherCoursesList:
-#    db.session.add(OtherCourses(**o))
-#for f in offeredCourseList:
-#    db.session.add(offeredCourses(**f))
-#db.session.commit()
+db.create_all()
+for c in courseList:
+    db.session.add(Courses(**c))
+for a in antireqList:
+    db.session.add(AntiReq(**a))
+for p in prereqList:
+    db.session.add(PreReq(**p))
+for o in otherCoursesList:
+    db.session.add(OtherCourses(**o))
+for f in offeredCourseList:
+    db.session.add(offeredCourses(**f))
+db.session.commit()

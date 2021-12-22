@@ -41,9 +41,9 @@ class PostForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
     # TODO: Use user courses as the choice list
     course = SelectField('Course',
-                         choices=[('CPSC 571', 'CPSC 571'), ('CPSC 313', 'CPSC 313'),
-                                  ('CPSC 441', 'CPSC 441'), ('CPSC 449', 'CPSC 449'),
-                                  ('CPSC 530', 'CPSC 530'), ('CPSC 231', 'CPSC 231')],
+                         choices=[('CPSC571', 'CPSC 571'), ('CPSC313', 'CPSC 313'),
+                                  ('CPSC441', 'CPSC 441'), ('CPSC449', 'CPSC 449'),
+                                  ('CPSC530', 'CPSC 530'), ('CPSC231', 'CPSC 231')],
                          validators=[DataRequired()])
     content = TextAreaField('Content', validators=[DataRequired()])
     gradingScale = TextAreaField('Grading Scale')
@@ -61,6 +61,12 @@ class RateForm(FlaskForm):
                                   ('5', '5')],
                          validators=[DataRequired()])
     submit = SubmitField('Rate')
+
+class SubmitAssignmentForm(FlaskForm):
+    submissionFile = FileField('submissionFile')
+    content = TextAreaField('Comment', validators=[DataRequired()])
+    submit = SubmitField('Post')
+
 
 class MultiCheckboxField(SelectMultipleField):
     widget = widgets.ListWidget(prefix_label=False)
