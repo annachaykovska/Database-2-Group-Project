@@ -1,7 +1,8 @@
 from flask_login import current_user
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, SelectField, TextAreaField, \
-    SelectMultipleField, widgets, FileField, HiddenField
+    SelectMultipleField, widgets, FileField, HiddenField, DecimalField
+
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 from website.models import User
 
@@ -41,9 +42,9 @@ class PostForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
     # TODO: Use user courses as the choice list
     course = SelectField('Course',
-                         choices=[('CPSC 571', 'CPSC 571'), ('CPSC 313', 'CPSC 313'),
-                                  ('CPSC 441', 'CPSC 441'), ('CPSC 449', 'CPSC 449'),
-                                  ('CPSC 530', 'CPSC 530'), ('CPSC 231', 'CPSC 231')],
+                         choices=[('CPSC571', 'CPSC 571'), ('CPSC313', 'CPSC 313'),
+                                  ('CPSC441', 'CPSC 441'), ('CPSC449', 'CPSC 449'),
+                                  ('CPSC530', 'CPSC 530'), ('CPSC231', 'CPSC 231')],
                          validators=[DataRequired()])
     content = TextAreaField('Content', validators=[DataRequired()])
     gradingScale = TextAreaField('Grading Scale')
@@ -57,14 +58,27 @@ class RateForm(FlaskForm):
     Term = StringField("Term"),
     Section = StringField("Section"),
     content = TextAreaField('Content')
-    rating =  SelectField('Rating',
-                         choices=[('1', '1'),('1.5', '1.5'),
-                                  ('2', '2'),('2.5', '2.5'),
-                                  ('3', '3'),('3.5', '3.5'),
-                                  ('4', '4'),('4.5', '4.5'),
+    rating = SelectField('Rating',
+                         choices=[('1', '1'), ('1.5', '1.5'),
+                                  ('2', '2'), ('2.5', '2.5'),
+                                  ('3', '3'), ('3.5', '3.5'),
+                                  ('4', '4'), ('4.5', '4.5'),
                                   ('5', '5')],
                          validators=[DataRequired()])
     submit = SubmitField('Rate')
+
+
+class SubmitAssignmentForm(FlaskForm):
+    submissionFile = FileField('submissionFile')
+    content = TextAreaField('Comment', validators=[DataRequired()])
+    submit = SubmitField('Post')
+
+
+class GradeSubmissionForm(FlaskForm):
+    comments = TextAreaField('Grading Comments', validators=[DataRequired()])
+    grade = DecimalField('Grade (out of 100%)', default=0.0, places=2, validators=[DataRequired()])
+    submit = SubmitField('Submit Grade')
+
 
 class MultiCheckboxField(SelectMultipleField):
     widget = widgets.ListWidget(prefix_label=False)

@@ -27,6 +27,9 @@
                 </form>
                 <p>File Name: {{post.file_name}}</p>
             {% endif %}
+            {% if addSubmissionButton %}
+                <a class="btn btn-warning btn-sm mt-1 mb-1" href="{{ url_for('submit_assignment', post_id=post.id) }}">Add a Submission</a>
+            {% endif %}
           </div>
         </article>
     {% endfor %}
