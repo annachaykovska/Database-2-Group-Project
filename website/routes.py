@@ -14,14 +14,16 @@ from flask_login import login_user, current_user, logout_user, login_required, A
 @app.route("/")
 @app.route("/home")
 def home():
-    # posts = Post.query.filter(((Post.course == current_user.current_course_1) |
-    #                            (Post.course == current_user.current_course_2) |
-    #                            (Post.course == current_user.current_course_3) |
-    #                            (Post.course == current_user.current_course_4) |
-    #                            (Post.course == current_user.current_course_5) |
-    #                            (Post.course == current_user.current_course_6))
-    #                           & Post.assignment_flag == 0).all()
-    posts = Post.query.all()
+    posts = []
+    if current_user.is_authenticated:
+        posts = Post.query.filter(((Post.course == current_user.current_course_1) |
+                                   (Post.course == current_user.current_course_2) |
+                                   (Post.course == current_user.current_course_3) |
+                                   (Post.course == current_user.current_course_4) |
+                                   (Post.course == current_user.current_course_5) |
+                                   (Post.course == current_user.current_course_6))
+                                  & Post.assignment_flag == 0).all()
+    # posts = Post.query.all()
     return render_template('home.html', posts=posts, addSubmissionButton=False)
 
 
