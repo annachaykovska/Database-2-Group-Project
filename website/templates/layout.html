@@ -68,14 +68,11 @@
                         <li class="list-group-item list-group-item-light"><a href="{{ url_for('RateProfessors') }}">Rate Professors</a></li>
                     {% endif %}
                     {% if current_user.role != 0 %}
-                        <li class="list-group-item list-group-item-light">
-                            <a href="{{ url_for('new_post') }}">New Post</a>
-                        </li>
-                      <li class="list-group-item list-group-item-light">
-                            <a href="{{ url_for('new_assignment') }}">New Assignment</a>
-                        </li>
+                        <li class="list-group-item list-group-item-light"><a href="{{ url_for('new_post') }}">New Post</a></li>
+                        <li class="list-group-item list-group-item-light"><a href="{{ url_for('new_assignment') }}">New Assignment</a></li>
+                        <li class="list-group-item list-group-item-light"><a href="{{ url_for('view_submissions') }}">View Submissions</a></li>
                     {% endif %}
-                    <li class="list-group-item list-group-item-light"><a href="{{ url_for('view_assignments') }}">View Assignments</a></li>
+                    <li class="list-group-item list-group-item-light"><a href="{{ url_for('view_assignments') }}">Assignments</a></li>
                     {% if current_user.role == 2 %}
                       <li class="list-group-item list-group-item-light"><a href="{{ url_for('AssignProf') }}">Assign Professors</a></li>
                     {% endif %}

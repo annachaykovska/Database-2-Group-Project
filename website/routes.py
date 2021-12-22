@@ -200,16 +200,36 @@ def submit_assignment(post_id):
     if form.validate_on_submit():
         submission = Submission(post_id=post_id,
                                 submitter_id=current_user.id,
-                                submission_notes=form.content.data)
+                                submission_notes=form.content.data,
+                                assignment_title=post.title,
+                                course=post.course)
         file_data = request.files.get(form.submissionFile.name)
         if file_data:
-            submission.file_name = form.submissionFile.name
+            submission.file_name = file_data.filename
             submission.file_data = file_data.read()
         db.session.add(submission)
         db.session.commit()
         flash('Your submission has been successful!', 'success')
         return redirect(url_for('view_assignments'))
-    return render_template('submission.html', form=form, post=post)
+    return render_template('new_submission.html', form=form, post=post)
+
+
+@app.route("/assignments/view_submissions/", methods=['GET', 'POST'])
+@login_required
+def view_submissions():
+    submissions = Submission.query.filter((Submission.course == current_user.current_course_1) |
+                                          (Submission.course == current_user.current_course_2) |
+                                          (Submission.course == current_user.current_course_3) |
+                                          (Submission.course == current_user.current_course_4) |
+                                          (Submission.course == current_user.current_course_5) |
+                                          (Submission.course == current_user.current_course_6)).all()
+    return render_template('view_submissions.html', submissions=submissions)
+
+
+@app.route("/assignments/grade_submissions/<int:submission_id>", methods=['GET', 'POST'])
+@login_required
+def grade_submissions(submission_id):
+    return render_template('grade_submissions.html')
 
 
 @app.route("/post/new", methods=['GET', 'POST'])
@@ -224,7 +244,7 @@ def new_post():
                     course=form.course.data,
                     assignment_flag=False)
         if file_data:
-            post.file_name = form.assignmentFile.name
+            post.file_name = file_data.filename
             post.file_data = file_data.read()
         db.session.add(post)
         db.session.commit()
@@ -297,7 +317,7 @@ def update_post(post_id):
         else:
             post.due_date = None
         if file_data:
-            post.file_name = form.assignmentFile.name
+            post.file_name = file_data.filename
             post.file_data = file_data.read()
         db.session.commit()
         flash('Your post has been updated!', 'success')
