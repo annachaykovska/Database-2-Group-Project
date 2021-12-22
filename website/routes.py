@@ -247,7 +247,11 @@ def grade_submissions(submission_id):
 @app.route("/view_grades", methods=['GET', 'POST'])
 @login_required
 def view_grades():
-    return render_template('view_grades.html')
+    if current_user.role == 0:
+        submissions = Submission.query.filter(Submission.submitter_id == current_user.id)
+    else:
+        submissions = Submission.query.filter(Submission.grader_id == current_user.id)
+    return render_template('view_grades.html', submissions=submissions)
 
 
 @app.route("/post/new", methods=['GET', 'POST'])
