@@ -137,15 +137,16 @@ def CourseEnrollment():
 @app.route("/RateProfessors", methods=['GET', 'POST'])
 def RateProfessors():
     teachingProfs = offeredCourses.query.all()
-    counter = professorRatings.query.first()
-    form = RateForm()
+    counter = professorRatings.query.order_by(professorRatings.ID.desc()).first()
+    form = RateForm(request.form)
     if form.validate_on_submit():
-        studentRate = professorRatings( CourseCode = "",
-                                        Prof = "",
-                                        Term = "",
-                                        Section = "",
-                                        Rating = form.rating.data,
-                                        Comments = form.content.data,
+
+        studentRate = professorRatings( CourseCode  = request.form["CourseCode"],
+                                        Prof        = request.form["Prof"],
+                                        Term        = request.form["Term"],
+                                        Section     = request.form["Section"],
+                                        Rating      = form.rating.data,
+                                        Comments    = form.content.data,
                                         ID = int(counter.ID) + 1
                                         )
         db.session.add(studentRate)
