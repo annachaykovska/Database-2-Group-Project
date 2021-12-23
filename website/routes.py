@@ -270,7 +270,13 @@ def view_grades():
 @app.route("/post/new", methods=['GET', 'POST'])
 @login_required
 def new_post():
+    courses = offeredCourses.query.with_entities(offeredCourses.CourseCode).filter_by(Prof=current_user.username).all()
+    courseList = []
+    for c in courses:
+        courseList.append((c.CourseCode,c.CourseCode))
     form = PostForm()
+
+    form.course.choices = courseList
     if form.validate_on_submit():
         file_data = request.files.get(form.assignmentFile.name)
         post = Post(title=form.title.data,
@@ -292,7 +298,12 @@ def new_post():
 @app.route("/assignment/new", methods=['GET', 'POST'])
 @login_required
 def new_assignment():
+    courses = offeredCourses.query.with_entities(offeredCourses.CourseCode).filter_by(Prof=current_user.username).all()
+    courseList = []
+    for c in courses:
+        courseList.append((c.CourseCode,c.CourseCode))
     form = PostForm()
+    form.course.choices = courseList
     if form.validate_on_submit():
         file_data = request.files.get(form.assignmentFile.name)
         dueString = request.form.get('duetime')
