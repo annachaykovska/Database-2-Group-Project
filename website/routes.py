@@ -1,12 +1,15 @@
 from datetime import datetime
 from io import BytesIO
-
-from flask import render_template, flash, redirect, url_for, request, abort, send_file
+import re
+from flask import render_template, flash, redirect, url_for, request, abort, send_file, jsonify
 from website import app, db, bcrypt
 from website.models import Courses, PreReq, AntiReq, User, Post, OtherCourses
 from website.forms import RegistrationForm, LoginForm, PostForm, UpdateAccountForm
 from flask_login import login_user, current_user, logout_user, login_required
-
+from website.defaultDatabaseEntries import courseList, antireqList, prereqList, otherCoursesList
+import json
+import website.Jaccard
+from website.Predictor import Predictor
 
 @app.route("/")
 @app.route("/home")
@@ -120,9 +123,13 @@ def courses():
     return render_template('courses.html')
 
 
-@app.route("/IO")
+@app.route("/IO",)
 def IO():
-    return render_template('IO.html')
+    previousClasses = current_user.pastCpscCourses.split(", ")
+    cl = Predictor.predict(previousClasses)
+    if len(cl) == 0:
+        cl = ["With the given selection of courses no recommendations were possible. Please try again or change your previous courses under the account settings"]
+    return render_template('IO.html',addedClasses=cl)
 
 
 @app.route("/post/new", methods=['GET', 'POST'])

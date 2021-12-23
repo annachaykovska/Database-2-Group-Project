@@ -49,12 +49,12 @@ class Jaccard:
         seed2 = (int)(random.random() * numStudents)
         seed3 = (int)(random.random() * numStudents)
         k1 = arrayList[seed]
-        print(seed)
+        #print(seed)
         if self.similarity(arrayList[seed2],k1) != 0:
             while self.similarity(arrayList[seed2],k1) != 0:
                 seed2 = (int)(random.random() * numStudents)
         k2 = arrayList[seed2]
-        print(seed2)
+        #print(seed2)
         if self.similarity(arrayList[seed3],k2) != 0 or self.similarity(arrayList[seed3],k1) != 0:
             while self.similarity(arrayList[seed3],k2) != 0 or self.similarity(arrayList[seed3],k1) != 0:
                 seed3 = (int)(random.random() * numStudents)
@@ -136,7 +136,8 @@ class Jaccard:
                 k3 = [round(num/k3size) for num in k3]
             #print(currentcluster)
             
-        return numpy.array([k1, k2, k3])    
+        #return numpy.array([k1, k2, k3]) 
+        return [k1, k2, k3]  
 
 jc = Jaccard()
     #print(similarity(testArr,testArr2))

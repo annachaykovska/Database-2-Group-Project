@@ -1,4 +1,14 @@
 {% extends "layout.html" %}
 {% block content %}
-    <a>"This is where Term Project Information goes"</a>
+<h1 class="article-title">Class Recommendations:</h1>
+
+  {% for p in addedClasses%}
+  <p name="addedCourses">
+    <article class="media content-section">
+    {{p}} 
+    </article>
+
+  </p>
+  {% endfor %}
+
 {% endblock content %}
