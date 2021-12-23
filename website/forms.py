@@ -4,7 +4,7 @@ from wtforms import StringField, PasswordField, SubmitField, BooleanField, Selec
     SelectMultipleField, widgets, FileField, HiddenField, DecimalField
 
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
-from website.models import User, Courses
+from website.models import User, Courses, offeredCourses
 
 
 class RegistrationForm(FlaskForm):
@@ -41,6 +41,10 @@ class LoginForm(FlaskForm):
 class PostForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
     # TODO: Use user courses as the choice list
+    #courses = offeredCourses.query.with_entities(offeredCourses.CourseCode).filter_by(Prof=current_user.username).all()
+    #courseList = []
+    #for c in courses:
+    #    courseList.append(c.CourseCode)
     course = SelectField('Course',
                          choices=[('CPSC571', 'CPSC 571'), ('CPSC313', 'CPSC 313'),
                                   ('CPSC441', 'CPSC 441'), ('CPSC449', 'CPSC 449'),
