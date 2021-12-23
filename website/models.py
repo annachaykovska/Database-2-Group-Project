@@ -144,15 +144,15 @@ class professorRatings(db.Model):
     ID = db.Column(db.Integer, primary_key=True)
 
 # TODO: Comment this out if you don't need to make a new database
-# db.create_all()
-# for c in courseList:
-#     db.session.add(Courses(**c))
-# for a in antireqList:
-#     db.session.add(AntiReq(**a))
-# for p in prereqList:
-#     db.session.add(PreReq(**p))
-# for o in otherCoursesList:
-#     db.session.add(OtherCourses(**o))
-# for f in offeredCourseList:
-#     db.session.add(offeredCourses(**f))
-# db.session.commit()
+#db.create_all()
+#for c in courseList:
+#    db.session.add(Courses(**c))
+#for a in antireqList:
+#    db.session.add(AntiReq(**a))
+#for p in prereqList:
+#    db.session.add(PreReq(**p))
+#for o in otherCoursesList:
+#    db.session.add(OtherCourses(**o))
+#for f in offeredCourseList:
+#    db.session.add(offeredCourses(**f))
+#db.session.commit()

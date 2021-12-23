@@ -4,7 +4,7 @@ from wtforms import StringField, PasswordField, SubmitField, BooleanField, Selec
     SelectMultipleField, widgets, FileField, HiddenField, DecimalField
 
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
-from website.models import User
+from website.models import User, Courses
 
 
 class RegistrationForm(FlaskForm):
@@ -52,7 +52,6 @@ class PostForm(FlaskForm):
     submit = SubmitField('Post')
 
 class RateForm(FlaskForm):
-
     CourseCode = StringField("CourseCode"),
     Prof = StringField("Prof"),
     Term = StringField("Term"),
@@ -67,6 +66,29 @@ class RateForm(FlaskForm):
                          validators=[DataRequired()])
     submit = SubmitField('Rate')
 
+class AssignProfForm(FlaskForm):
+    profs= User.query.with_entities(User.username).filter_by(role="1").all()
+    profList = []
+    for p in profs:
+        profList.append(p.username)
+    courses = Courses.query.with_entities(Courses.CourseCode).all()
+    courseList = []
+    for c in courses:
+        courseList.append(c.CourseCode)
+    CourseCode = SelectField('CourseCode',
+                         choices=[(course,course) for course in courseList],
+                         validators=[DataRequired()])
+    Prof = SelectField('Prof',
+                         choices=[(prof,prof) for prof in profList],
+                         validators=[DataRequired()])
+    Term = SelectField('Term',
+                         choices=[('Fall 2021', 'Fall2021'), ('Winter 2022', 'Winter2022')],
+                         validators=[DataRequired()])
+    Section = SelectField('Section',
+                         choices=[('L01', 'L01'), ('L02', 'L02'),
+                                  ('L03', 'L03')],
+                         validators=[DataRequired()])
+    submit = SubmitField('Confirm')
 
 class SubmitAssignmentForm(FlaskForm):
     submissionFile = FileField('submissionFile')
