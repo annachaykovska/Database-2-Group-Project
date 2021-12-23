@@ -1,6 +1,10 @@
 from datetime import datetime, timezone
 from io import BytesIO
-
+import re
+from website.defaultDatabaseEntries import courseList, antireqList, prereqList, otherCoursesList
+import json
+import website.Jaccard
+from website.Predictor import Predictor
 import pytz
 from flask import render_template, flash, redirect, url_for, request, abort, send_file
 from website import app, db, bcrypt
@@ -141,6 +145,12 @@ def courses():
 
 @app.route("/IO")
 def IO():
+    if current_user.is_authenticated:
+        previousClasses = current_user.pastCpscCourses.split(", ")
+        cl = Predictor.predict(previousClasses)
+        if len(cl) == 0:
+            cl = ["With the given selection of courses no recommendations were possible. Please try again or change your previous courses under the account settings"]
+        return render_template('IO.html',addedClasses=cl)
     return render_template('IO.html')
 
 

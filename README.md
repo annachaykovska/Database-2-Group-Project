@@ -6,6 +6,7 @@
 - flask_wtf
 - flask_bcrypt
 - flask_login
+- numpy
 
 ### Run (Windows)
 - Go to repository with the run.py file
