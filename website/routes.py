@@ -186,6 +186,39 @@ def RateProfessors():
     return render_template('RateProfessors.html', teachingProfs = teachingProfs, form = form)
 
 
+@app.route("/view_professor_ratings", methods=['GET', 'POST'])
+def view_professor_ratings():
+    students = User.query.filter(User.role == 0).all()
+    users = User.query.all()
+    # Get unique courses
+    courses = []
+    for u in users:
+        courses.append(u.current_course_1)
+        courses.append(u.current_course_2)
+        courses.append(u.current_course_3)
+        courses.append(u.current_course_4)
+        courses.append(u.current_course_5)
+        courses.append(u.current_course_6)
+    courses = set(courses)
+    courses.discard(None)
+
+    submissions = Submission.query.all()
+    grades = []
+    for s in students:
+        # for
+        temp = {'id': s.id, 'grade': 0.0, 'num': 0}
+        grades.append(temp)
+
+    for sub in submissions:
+        for g in grades:
+            if sub.submitter_id == g['id']:
+                g['grade'] += sub.grade
+                g['num'] += 1
+
+    print(grades)
+    return render_template('view_professor_ratings.html')
+
+
 @app.route("/assignments/current", methods=['GET', 'POST'])
 @login_required
 def view_assignments():
