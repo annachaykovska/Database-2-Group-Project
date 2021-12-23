@@ -7,7 +7,7 @@ from website import app, db, bcrypt
 from website.models import Courses, PreReq, AntiReq, User, Post, OtherCourses, offeredCourses, Submission, \
     professorRatings
 from website.forms import RegistrationForm, LoginForm, PostForm, UpdateAccountForm, SubmitAssignmentForm, RateForm, \
-    GradeSubmissionForm
+    GradeSubmissionForm,AssignProfForm
 from flask_login import login_user, current_user, logout_user, login_required, AnonymousUserMixin
 
 
@@ -144,9 +144,19 @@ def IO():
     return render_template('IO.html')
 
 
-@app.route("/AssignProf")
+@app.route("/AssignProf", methods=['GET', 'POST'])
 def AssignProf():
-    return render_template('AssignProf.html')
+    form = AssignProfForm()
+    teachingProfs = offeredCourses.query.all()
+    if form.validate_on_submit():
+        teachingAssignment = offeredCourses(CourseCode  = form.CourseCode.data,
+                                            Prof        = form.Prof.data,
+                                            Term        = form.Term.data,
+                                            Section     = form.Section.data,
+                                            )
+        db.session.add(teachingAssignment)
+        db.session.commit()
+    return render_template('AssignProf.html', form=form)
 
 
 @app.route("/CourseEnrollment")
