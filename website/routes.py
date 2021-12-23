@@ -5,9 +5,9 @@ import pytz
 from flask import render_template, flash, redirect, url_for, request, abort, send_file
 from website import app, db, bcrypt
 from website.models import Courses, PreReq, AntiReq, User, Post, OtherCourses, offeredCourses, Submission, \
-    professorRatings
+    professorRatings, enrolledCourses
 from website.forms import RegistrationForm, LoginForm, PostForm, UpdateAccountForm, SubmitAssignmentForm, RateForm, \
-    GradeSubmissionForm,AssignProfForm
+    GradeSubmissionForm,AssignProfForm,courseEnrollForm
 from flask_login import login_user, current_user, logout_user, login_required, AnonymousUserMixin
 
 
@@ -152,17 +152,30 @@ def AssignProf():
         teachingAssignment = offeredCourses(CourseCode  = form.CourseCode.data,
                                             Prof        = form.Prof.data,
                                             Term        = form.Term.data,
-                                            Section     = form.Section.data,
+                                            Section     = form.Section.data
                                             )
         db.session.add(teachingAssignment)
         db.session.commit()
     return render_template('AssignProf.html', form=form)
 
 
-@app.route("/CourseEnrollment")
+@app.route("/CourseEnrollment", methods=['GET', 'POST'])
 def CourseEnrollment():
     offerdCourses = offeredCourses.query.all()
-    return render_template('CourseEnrollment.html', offerdCourses = offerdCourses)
+    form = courseEnrollForm()
+    if form.validate_on_submit():
+        enrollCourse = enrolledCourses(
+                                    id          = current_user.id,
+                                    username    = current_user.username,
+                                    CourseCode  = request.form["CourseCode"],
+                                    Prof        = request.form["Prof"],
+                                    Term        = request.form["Term"],
+                                    Section     = request.form["Section"]
+                                    )
+        db.session.add(enrollCourse)
+        db.session.commit()
+
+    return render_template('CourseEnrollment.html', offerdCourses = offerdCourses, form = form)
 
 
 @app.route("/RateProfessors", methods=['GET', 'POST'])

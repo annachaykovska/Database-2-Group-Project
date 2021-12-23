@@ -56,6 +56,14 @@ class PostForm(FlaskForm):
     submit = SubmitField('Post')
 
 
+class courseEnrollForm(FlaskForm):
+    CourseCode = StringField("CourseCode"),
+    Prof = StringField("Prof"),
+    Term = StringField("Term"),
+    Section = StringField("Section"),
+    submit = SubmitField('Enroll')
+
+
 class RateForm(FlaskForm):
     CourseCode = StringField("CourseCode"),
     Prof = StringField("Prof"),

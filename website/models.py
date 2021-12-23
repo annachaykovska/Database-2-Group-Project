@@ -143,6 +143,17 @@ class professorRatings(db.Model):
     Comments = db.Column(db.String(150), nullable=True)
     ID = db.Column(db.Integer, primary_key=True)
 
+
+class enrolledCourses(db.Model):
+    __tablename__ = "enrolledCourses"
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(20), unique=True, nullable=False)
+    CourseCode = db.Column(db.String(7), primary_key=True)
+    Prof = db.Column(db.String(150), primary_key=True)
+    Term = db.Column(db.String(10), primary_key=False)
+    Section = db.Column(db.String(3), nullable=False)
+
+
 # TODO: Comment this out if you don't need to make a new database
 #db.create_all()
 #for c in courseList:
