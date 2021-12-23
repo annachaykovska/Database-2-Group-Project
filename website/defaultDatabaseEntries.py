@@ -399,3 +399,14 @@ otherCoursesList = [
     {"Department": "MATH", "Course": "30-2", "CourseCode": "MATH30-2", "Name": "Highschool Math (Grade 12)"},
     {"Department": "MATH", "Course": "31", "CourseCode": "MATH31", "Name": "Highschool Calculus"}
 ]
+
+offeredCourseList = [
+    {"CourseCode": "CPSC571","Prof": "Austin","Term":"Fall2021","Section":"L01"},
+    {"CourseCode": "CPSC313","Prof": "Austin","Term":"Fall2021","Section":"L01"},
+    {"CourseCode": "CPSC313","Prof": "Austin","Term":"Fall2021","Section":"L02"},
+    {"CourseCode": "CPSC441","Prof": "Nathan","Term":"Fall2021","Section":"L01"},
+    {"CourseCode": "CPSC449","Prof": "Nathan","Term":"Fall2021","Section":"L01"},
+    {"CourseCode": "CPSC530","Prof": "Anna"  ,"Term":"Fall2021","Section":"L01"},
+    {"CourseCode": "CPSC231","Prof": "Anna"  ,"Term":"Fall2021","Section":"L01"},
+    {"CourseCode": "CPSC231","Prof": "Anna"  ,"Term":"Fall2021","Section":"L02"},
+]

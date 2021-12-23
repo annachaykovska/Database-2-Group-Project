@@ -73,7 +73,7 @@ class Decoder:
                     antireqs2.append(val.split(","))
                 setchecks = []
                 coursecheck = -2
-                print(antireqs2)
+                #print(antireqs2)
                 for val in antireqs2:
                     #print(val)
                     #ignore non CPSC classes
@@ -109,7 +109,7 @@ class Decoder:
                         coursecheck = -2
                     else:
                         coursecheck = -2
-                print(setchecks)
+                #print(setchecks)
                 if any(setchecks) == True:
                     filteredrecommendation[num] = 0 
         return filteredrecommendation

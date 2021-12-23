@@ -1,0 +1,20 @@
+{% extends "layout.html" %}
+{% block content %}
+    {% for submission in submissions %}
+        <article class="media content-section">
+          <div class="media-body">
+            <h2><a class="article-title">{{ submission.assignment_title }}</a></h2>
+            <h6>{{submission.course}}</h6>
+            <p class="mr-2">Date Submitted: {{ submission.date_submitted.strftime('%Y-%m-%d %H:%M') }}</p>
+            {% if submission.graded_flag == 0 %}
+                <h6>No grade available yet.</h6>
+            {% else %}
+                <h6>Grade</h6>
+                <p class="article-content">{{ submission.grade }}%</p>
+                <h6>Grader's Comments</h6>
+                <p class="article-content">{{ submission.grading_notes }}</p>
+            {% endif %}
+          </div>
+        </article>
+    {% endfor %}
+{% endblock content %}

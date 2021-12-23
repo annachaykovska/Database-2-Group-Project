@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+{% block content %}
+    {% for offCourse in offerdCourses %}
+    <div class="media-body">
+        <h2><a class="article-title" href="{{ offCourse.CourseCode }}">{{ offCourse.CourseCode }}</a></h2>
+        <p class="article-content">Professor {{ offCourse.Prof }}</p>
+        <p class="article-content">{{ offCourse.Term }} {{ offCourse.Section }}</p>
+            <form method="POST" action="" enctype="multipart/form-data">
+
+
+                    <input type="hidden" name="CourseCode" id="CourseCode" value="{{offCourse.CourseCode }}">
+                    <input type="hidden" name="Prof" id="Prof" value="{{offCourse.Prof}}">
+                    <input type="hidden" name="Term" id="Term" value="{{offCourse.Term}}">
+                    <input type="hidden" name="Section" id="Section" value="{{offCourse.Section    }}">
+
+                {{ form.submit(class="btn btn-outline-info") }}
+            </form>
+    </div>
+    <br /><hr />
+    {% endfor %}
+{% endblock content %}

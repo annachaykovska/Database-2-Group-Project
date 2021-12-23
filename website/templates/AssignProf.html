@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+{% block content %}
+    <form method="POST" action="" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4">{{ legend }}</legend>
+            <div class="form-group">
+                {{ form.CourseCode.label(class="form-control-label") }}
+                {{ form.CourseCode(class="form-control form-control-lg") }}
+            </div>
+            <div class="form-group">
+                {{ form.Prof.label(class="form-control-label") }}
+                {{ form.Prof(class="form-control form-control-lg") }}
+            </div>
+            <div class="form-group">
+                {{ form.Term.label(class="form-control-label") }}
+                {{ form.Term(class="form-control form-control-lg") }}
+            </div>
+            <div class="form-group">
+                {{ form.Section.label(class="form-control-label") }}
+                {{ form.Section(class="form-control form-control-lg") }}
+            </div>
+        </fieldset>
+        <div class="form-group">
+            {{ form.submit(class="btn btn-outline-info") }}
+            <input type="hidden" name="worth" id="less" value="Null">
+        </div>
+    </form>
+{% endblock content %}
