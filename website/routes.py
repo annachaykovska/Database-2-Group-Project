@@ -146,7 +146,7 @@ def IO():
         cl = Predictor.predict(previousClasses)
         if len(cl) == 0:
             cl = ["With the given selection of courses no recommendations were possible. Please try again or change your previous courses under the account settings"]
-        return render_template('IO.html',addedClasses=cl)
+        return render_template('IO.html', addedClasses=cl)
     return render_template('IO.html')
 
 
@@ -161,6 +161,19 @@ def AssignProf():
                                             Section     = form.Section.data
                                             )
         db.session.add(teachingAssignment)
+        db.session.commit()
+        if current_user.current_course_1 is None:
+            current_user.current_course_1 = teachingAssignment.CourseCode
+        elif current_user.current_course_2 is None:
+            current_user.current_course_2 = teachingAssignment.CourseCode
+        elif current_user.current_course_3 is None:
+            current_user.current_course_3 = teachingAssignment.CourseCode
+        elif current_user.current_course_4 is None:
+            current_user.current_course_4 = teachingAssignment.CourseCode
+        elif current_user.current_course_5 is None:
+            current_user.current_course_5 = teachingAssignment.CourseCode
+        elif current_user.current_course_6 is None:
+            current_user.current_course_6 = teachingAssignment.CourseCode
         db.session.commit()
     return render_template('AssignProf.html', form=form)
 
@@ -362,13 +375,17 @@ def view_grades():
 @app.route("/post/new", methods=['GET', 'POST'])
 @login_required
 def new_post():
-    courses = offeredCourses.query.with_entities(offeredCourses.CourseCode).filter_by(Prof=current_user.username).all()
-    courseList = []
-    for c in courses:
-        courseList.append((c.CourseCode,c.CourseCode))
+    # courses = offeredCourses.query.with_entities(offeredCourses.CourseCode).filter_by(Prof=current_user.username).all()
+    # courseList = []
+    # for c in courses:
+    #     courseList.append((c.CourseCode,c.CourseCode))
+    courseList = set([current_user.current_course_1, current_user.current_course_2,
+                      current_user.current_course_3, current_user.current_course_4,
+                      current_user.current_course_5, current_user.current_course_6])
+    courseList.discard(None)
     form = PostForm()
 
-    form.course.choices = courseList
+    form.course.choices = list(courseList)
     if form.validate_on_submit():
         file_data = request.files.get(form.assignmentFile.name)
         post = Post(title=form.title.data,
@@ -390,12 +407,17 @@ def new_post():
 @app.route("/assignment/new", methods=['GET', 'POST'])
 @login_required
 def new_assignment():
-    courses = offeredCourses.query.with_entities(offeredCourses.CourseCode).filter_by(Prof=current_user.username).all()
-    courseList = []
-    for c in courses:
-        courseList.append((c.CourseCode,c.CourseCode))
+    # courses = offeredCourses.query.with_entities(offeredCourses.CourseCode).filter_by(Prof=current_user.username).all()
+    # courseList = []
+    # for c in courses:
+    #     courseList.append((c.CourseCode,c.CourseCode))
+    courseList = set([current_user.current_course_1, current_user.current_course_2,
+                      current_user.current_course_3, current_user.current_course_4,
+                      current_user.current_course_5, current_user.current_course_6])
+    courseList.discard(None)
+    print(courseList)
     form = PostForm()
-    form.course.choices = courseList
+    form.course.choices = list(courseList)
     if form.validate_on_submit():
         file_data = request.files.get(form.assignmentFile.name)
         dueString = request.form.get('duetime')
