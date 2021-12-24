@@ -20,6 +20,11 @@
     - ```export FLASK_APP=run.py```
     - ```flask run```
     
+### NOTE: if you are having issues with the above run instructions, please try
+- Go to repository with the run.py file
+- Run:
+    - ```python3 run.py```
+   
 ### See webpage
 - http://127.0.0.1:5000/
 
