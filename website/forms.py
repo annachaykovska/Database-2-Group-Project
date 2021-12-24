@@ -55,12 +55,14 @@ class PostForm(FlaskForm):
     assignmentFile = FileField('assignmentFile')
     submit = SubmitField('Post')
 
+
 class courseEnrollForm(FlaskForm):
     CourseCode = StringField("CourseCode"),
     Prof = StringField("Prof"),
     Term = StringField("Term"),
     Section = StringField("Section"),
     submit = SubmitField('Enroll')
+
 
 class RateForm(FlaskForm):
     CourseCode = StringField("CourseCode"),
@@ -76,6 +78,7 @@ class RateForm(FlaskForm):
                                   ('5', '5')],
                          validators=[DataRequired()])
     submit = SubmitField('Rate')
+
 
 class AssignProfForm(FlaskForm):
     profs= User.query.with_entities(User.username).filter_by(role="1").all()
@@ -100,6 +103,7 @@ class AssignProfForm(FlaskForm):
                                   ('L03', 'L03')],
                          validators=[DataRequired()])
     submit = SubmitField('Confirm')
+
 
 class SubmitAssignmentForm(FlaskForm):
     submissionFile = FileField('submissionFile')

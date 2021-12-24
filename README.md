@@ -1,6 +1,7 @@
 # CPSC-571-Group-Project
 
 ### Python Packages to Install (pip install)
+These are in the case you have an ImportError arise when running, make sure these packages are installed 
 - Flask
 - email_validator
 - flask_wtf
@@ -27,6 +28,15 @@
    
 ### See webpage
 - http://127.0.0.1:5000/
+
+### Pre-created accounts:
+- Username: teacher1    Email: teacher1@a.com   Password: 1234
+- Username: teacher2    Email: teacher2@a.com   Password: 1234
+- Username: teacher3    Email: teacher3@a.com   Password: 1234
+- Username: student1    Email: student1@a.com   Password: 1234
+- Username: student2    Email: student2@a.com   Password: 1234
+- Username: student3    Email: student3@a.com   Password: 1234
+- Username: admin       Email: admin@a.com      Password: 1234
 
 ### Programming Assignment Prompt
 Problem 8. Develop system which will help a school in smoothly running its educational program. They need to keep track
