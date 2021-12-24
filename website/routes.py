@@ -1,18 +1,14 @@
-from datetime import datetime, timezone
+from datetime import datetime
 from io import BytesIO
-import re
 from website.defaultDatabaseEntries import courseList, antireqList, prereqList, otherCoursesList
-import json
-import website.Jaccard
 from website.Predictor import Predictor
-import pytz
 from flask import render_template, flash, redirect, url_for, request, abort, send_file
 from website import app, db, bcrypt
 from website.models import Courses, PreReq, AntiReq, User, Post, OtherCourses, offeredCourses, Submission, \
     professorRatings, enrolledCourses
 from website.forms import RegistrationForm, LoginForm, PostForm, UpdateAccountForm, SubmitAssignmentForm, RateForm, \
-    GradeSubmissionForm,AssignProfForm,courseEnrollForm
-from flask_login import login_user, current_user, logout_user, login_required, AnonymousUserMixin
+    GradeSubmissionForm, AssignProfForm, courseEnrollForm
+from flask_login import login_user, current_user, logout_user, login_required
 
 
 @app.route("/")
@@ -191,55 +187,95 @@ def CourseEnrollment():
 @app.route("/RateProfessors", methods=['GET', 'POST'])
 def RateProfessors():
     teachingProfs = offeredCourses.query.all()
-    counter = professorRatings.query.order_by(professorRatings.ID.desc()).first()
     form = RateForm(request.form)
     if form.validate_on_submit():
-
-        studentRate = professorRatings( CourseCode  = request.form["CourseCode"],
-                                        Prof        = request.form["Prof"],
-                                        Term        = request.form["Term"],
-                                        Section     = request.form["Section"],
-                                        Rating      = form.rating.data,
-                                        Comments    = form.content.data,
-                                        ID = int(counter.ID) + 1
-                                        )
+        studentRate = professorRatings(CourseCode=request.form["CourseCode"],
+                                       Prof=request.form["Prof"],
+                                       Term=request.form["Term"],
+                                       Section=request.form["Section"],
+                                       Rating=form.rating.data,
+                                       Comments=form.content.data,
+                                       rater_id=current_user.id)
         db.session.add(studentRate)
         db.session.commit()
-    #Requires getting the currentUser and querying against the courses they're taking in another DB
-    return render_template('RateProfessors.html', teachingProfs = teachingProfs, form = form)
+        flash(f'Your rating for {studentRate.Prof} for {studentRate.CourseCode} {studentRate.Section} has been successful!', 'success')
+    return render_template('RateProfessors.html', teachingProfs=teachingProfs, form=form)
+
+
+class ProfRatings:
+    prof = ''
+    courses = []
+    # terms = []
+    # section = []
+    averageRating = None
+
+    def __init__(self, prof, courses):
+        self.prof = prof
+        self.courses = courses
+        self.ratings = [[], []]
+        return
+
+    def calcAverageRating(self):
+        ratingList = []
+        num = 0
+        for r in self.ratings:
+            if len(r) > 0:
+                ratingList.append(sum(r) / len(r))
+                num += 1
+        if num != 0:
+            self.averageRating = sum(ratingList) / num
+        return
 
 
 @app.route("/view_professor_ratings", methods=['GET', 'POST'])
 def view_professor_ratings():
+    oc = offeredCourses.query.all()
+    ratings = professorRatings.query.all()
     students = User.query.filter(User.role == 0).all()
-    users = User.query.all()
-    # Get unique courses
-    courses = []
-    for u in users:
-        courses.append(u.current_course_1)
-        courses.append(u.current_course_2)
-        courses.append(u.current_course_3)
-        courses.append(u.current_course_4)
-        courses.append(u.current_course_5)
-        courses.append(u.current_course_6)
-    courses = set(courses)
-    courses.discard(None)
 
-    submissions = Submission.query.all()
-    grades = []
-    for s in students:
-        # for
-        temp = {'id': s.id, 'grade': 0.0, 'num': 0}
-        grades.append(temp)
+    allRatings = []
+    for o in oc:
+        prof = None
+        for a in allRatings:
+            if a.prof == o.Prof:
+                prof = a
 
-    for sub in submissions:
-        for g in grades:
-            if sub.submitter_id == g['id']:
-                g['grade'] += sub.grade
-                g['num'] += 1
+        if prof is None:
+            prof = ProfRatings(prof=o.Prof,
+                               courses=[o.CourseCode])
+            allRatings.append(prof)
+        else:
+            if o.CourseCode not in prof.courses:
+                prof.courses.append(o.CourseCode)
 
-    print(grades)
-    return render_template('view_professor_ratings.html')
+    for r in ratings:
+        for b in allRatings:
+            if b.prof == r.Prof:
+                print(f'PROF: {b.prof}\n')
+                b.ratings[b.courses.index(r.CourseCode)].append(r.Rating)
+                print(b.ratings)
+
+    for a in allRatings:
+        print(a.prof)
+        print(a.courses)
+        print(a.ratings)
+        a.calcAverageRating()
+        print(a.averageRating)
+    # submissions = Submission.query.all()
+    # grades = []
+    # for s in students:
+    #     # for
+    #     temp = {'id': s.id, 'grade': 0.0, 'num': 0}
+    #     grades.append(temp)
+    #
+    # for sub in submissions:
+    #     for g in grades:
+    #         if sub.submitter_id == g['id']:
+    #             g['grade'] += sub.grade
+    #             g['num'] += 1
+
+    print(allRatings)
+    return render_template('view_professor_ratings.html', ratings=allRatings)
 
 
 @app.route("/assignments/current", methods=['GET', 'POST'])

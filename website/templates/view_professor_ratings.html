@@ -1,4 +1,18 @@
 {% extends "layout.html" %}
 {% block content %}
-    <p> nice </p>
+    {% for rate in ratings %}
+        <article class="media content-section">
+          <div class="media-body">
+            <div class="article-metadata">
+              <h4>{{ rate.prof }}</h4>
+            </div>
+            <a>Courses: {{rate.courses}} </a>
+            {% if rate.averageRating %}
+                <h5> Rating: {{rate.averageRating}}</h5>
+            {% else %}
+                <h5> Rating: No rating available</h5>
+            {% endif %}
+          </div>
+        </article>
+    {% endfor %}
 {% endblock content %}
